@@ -39,3 +39,17 @@ def get_body_measurement(body_measurement_id: int, db: Session = Depends(get_db)
     if not body_measurement:
         raise HTTPException(status_code=404, detail="Body measurement not found")
     return body_measurement
+
+
+@router.delete("/{body_measurement_id}")
+def delete_body_measurement(body_measurement_id: int, db: Session = Depends(get_db)):
+    body_measurement = (
+        db.query(models.BodyMeasurement)
+        .filter(models.BodyMeasurement.id == body_measurement_id)
+        .first()
+    )
+    if not body_measurement:
+        raise HTTPException(status_code=404, detail="Body measurement not found")
+    db.delete(body_measurement)
+    db.commit()
+    return {"message": "Body measurement deleted successfully"}

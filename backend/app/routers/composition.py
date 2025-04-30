@@ -35,3 +35,15 @@ def get_composition(composition_id: int, db: Session = Depends(get_db)):
     if not composition:
         raise HTTPException(status_code=404, detail="Composition not found")
     return composition
+
+
+@router.delete("/{composition_id}")
+def delete_composition(composition_id: int, db: Session = Depends(get_db)):
+    composition = (
+        db.query(models.Composition).filter(models.Composition.id == composition_id).first()
+    )
+    if not composition:
+        raise HTTPException(status_code=404, detail="Composition not found")
+    db.delete(composition)
+    db.commit()
+    return {"message": "Composition deleted successfully"}

@@ -39,3 +39,17 @@ def get_reference_range(loinc_code: str, db: Session = Depends(get_db)):
     if not reference_range:
         raise HTTPException(status_code=404, detail="Reference range not found")
     return reference_range
+
+
+@router.delete("/{loinc_code}")
+def delete_reference_range(loinc_code: str, db: Session = Depends(get_db)):
+    reference_range = (
+        db.query(models.ReferenceRange)
+        .filter(models.ReferenceRange.loinc_code == loinc_code)
+        .first()
+    )
+    if not reference_range:
+        raise HTTPException(status_code=404, detail="Reference range not found")
+    db.delete(reference_range)
+    db.commit()
+    return {"message": "Reference range deleted successfully"}

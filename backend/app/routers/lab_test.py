@@ -33,3 +33,13 @@ def get_lab_test(lab_test_id: int, db: Session = Depends(get_db)):
     if not lab_test:
         raise HTTPException(status_code=404, detail="Lab test not found")
     return lab_test
+
+
+@router.delete("/{lab_test_id}")
+def delete_lab_test(lab_test_id: int, db: Session = Depends(get_db)):
+    lab_test = db.query(models.LabTest).filter(models.LabTest.id == lab_test_id).first()
+    if not lab_test:
+        raise HTTPException(status_code=404, detail="Lab test not found")
+    db.delete(lab_test)
+    db.commit()
+    return {"message": "Lab test deleted successfully"}

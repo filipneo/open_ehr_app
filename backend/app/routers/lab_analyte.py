@@ -37,3 +37,17 @@ def get_lab_analyte(lab_analyte_id: int, db: Session = Depends(get_db)):
     if not lab_analyte:
         raise HTTPException(status_code=404, detail="Lab analyte result not found")
     return lab_analyte
+
+
+@router.delete("/{lab_analyte_id}")
+def delete_lab_analyte(lab_analyte_id: int, db: Session = Depends(get_db)):
+    lab_analyte = (
+        db.query(models.LabAnalyteResult)
+        .filter(models.LabAnalyteResult.id == lab_analyte_id)
+        .first()
+    )
+    if not lab_analyte:
+        raise HTTPException(status_code=404, detail="Lab analyte result not found")
+    db.delete(lab_analyte)
+    db.commit()
+    return {"message": "Lab analyte result deleted successfully"}

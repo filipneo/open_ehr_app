@@ -32,7 +32,7 @@ def populate_database():
                 "first_name": "John",
                 "last_name": "Doe",
                 "sex": "male",
-                "identifier": "JD-001",
+                "identifier": "PAT-001",
             }
         ],
     }

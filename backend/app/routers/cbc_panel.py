@@ -33,3 +33,13 @@ def get_cbc_panel(cbc_panel_id: int, db: Session = Depends(get_db)):
     if not cbc_panel:
         raise HTTPException(status_code=404, detail="CBC panel not found")
     return cbc_panel
+
+
+@router.delete("/{cbc_panel_id}")
+def delete_cbc_panel(cbc_panel_id: int, db: Session = Depends(get_db)):
+    cbc_panel = db.query(models.CBCPanel).filter(models.CBCPanel.id == cbc_panel_id).first()
+    if not cbc_panel:
+        raise HTTPException(status_code=404, detail="CBC panel not found")
+    db.delete(cbc_panel)
+    db.commit()
+    return {"message": "CBC panel deleted successfully"}

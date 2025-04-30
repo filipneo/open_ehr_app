@@ -39,3 +39,17 @@ def get_blood_type_panel(blood_type_panel_id: int, db: Session = Depends(get_db)
     if not blood_type_panel:
         raise HTTPException(status_code=404, detail="Blood type panel not found")
     return blood_type_panel
+
+
+@router.delete("/{blood_type_panel_id}")
+def delete_blood_type_panel(blood_type_panel_id: int, db: Session = Depends(get_db)):
+    blood_type_panel = (
+        db.query(models.BloodTypePanel)
+        .filter(models.BloodTypePanel.id == blood_type_panel_id)
+        .first()
+    )
+    if not blood_type_panel:
+        raise HTTPException(status_code=404, detail="Blood type panel not found")
+    db.delete(blood_type_panel)
+    db.commit()
+    return {"message": "Blood type panel deleted successfully"}

@@ -33,3 +33,13 @@ def get_specimen(specimen_id: int, db: Session = Depends(get_db)):
     if not specimen:
         raise HTTPException(status_code=404, detail="Specimen not found")
     return specimen
+
+
+@router.delete("/{specimen_id}")
+def delete_specimen(specimen_id: int, db: Session = Depends(get_db)):
+    specimen = db.query(models.Specimen).filter(models.Specimen.id == specimen_id).first()
+    if not specimen:
+        raise HTTPException(status_code=404, detail="Specimen not found")
+    db.delete(specimen)
+    db.commit()
+    return {"message": "Specimen deleted successfully"}
