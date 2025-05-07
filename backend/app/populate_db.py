@@ -1,8 +1,7 @@
 from datetime import datetime
 
-from sqlalchemy.orm import Session
-
 from app import database, models
+from sqlalchemy.orm import Session
 
 
 def parse_datetime(dt_str):
@@ -69,7 +68,7 @@ def populate_database():
         session.commit()
 
         # Create a composition for the first patient
-        patient_id = patient_map["JD-001"]
+        patient_id = patient_map["PAT-001"]
         composition = models.Composition(
             patient_id=patient_id, start_time=parse_datetime("2025-04-28T08:00:00Z")
         )

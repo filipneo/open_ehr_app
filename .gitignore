@@ -209,3 +209,6 @@ docker-volume/
 # Testing
 coverage/
 .nyc_output
+
+# Assingments
+*_assignment.pdf
