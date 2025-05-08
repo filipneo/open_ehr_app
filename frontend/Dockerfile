@@ -1,20 +1,10 @@
-FROM node:20
+FROM python:3.12-slim
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json (if available)
-COPY package*.json ./
+COPY requirements_docker.txt .
+RUN pip install --no-cache-dir -r requirements_docker.txt
 
-# Install dependencies
-RUN npm install
-
-# Copy the rest of the application code
 COPY . .
 
-# Make sure node_modules is properly installed and available
-RUN npm install --force 
-
-EXPOSE 3000
-
-# Use npm start to run the app
-CMD ["npm", "start"]
+CMD ["python", "frontend_app.py"]

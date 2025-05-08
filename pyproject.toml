@@ -1,15 +1,12 @@
 [project]
 name = "open-ehr-app"
 version = "0.1.0"
-description = "A FastAPI backend for CBC lab reports using SQLAlchemy and SQLite"
+description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi",
-    "uvicorn[standard]",
-    "sqlalchemy",
-    "pydantic",
+    "nicegui>=2.16.1",
+    "pydantic>=2.11.4",
+    "requests>=2.32.3",
+    "sqlalchemy>=2.0.40",
 ]
-[build-system]
-requires = ["setuptools>=61.0"]
-build-backend = "setuptools.build_meta"

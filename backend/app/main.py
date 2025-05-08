@@ -25,6 +25,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 # Initialize database (create tables and populate if empty)
 initialize_database()
 

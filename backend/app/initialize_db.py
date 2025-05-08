@@ -1,7 +1,6 @@
-from sqlalchemy.orm import Session
-
 from app import database, models
-from app.populate_direct import populate_database
+from app.populate_db import populate_database
+from sqlalchemy.orm import Session
 
 
 def initialize_database():
