@@ -1,0 +1,80 @@
+<div class="container mt-4">
+  <h2>Patient List</h2>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>First Name</th>
+        <th>Last Name</th>
+        <th>Sex</th>
+        <th>Identifier</th>
+        <th>Actions</th>      
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let patient of patients">
+        <td>{{ patient.id }}</td>
+        <td>{{ patient.first_name }}</td>
+        <td>{{ patient.last_name }}</td>
+        <td>{{ patient.sex }}</td>
+        <td>{{ patient.identifier }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(patient)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(patient)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Update Patient Modal -->
+<div class="modal fade" id="updatePatientModal" tabindex="-1" aria-labelledby="updatePatientModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updatePatientModalLabel">Update Patient</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="patientToUpdate" (ngSubmit)="onUpdateSubmit()">
+          <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="firstName" [(ngModel)]="patientToUpdate.first_name" name="firstName">
+          </div>
+          <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="lastName" [(ngModel)]="patientToUpdate.last_name" name="lastName">
+          </div>
+          <div class="mb-3">
+            <label for="sex" class="form-label">Sex</label>
+            <input type="text" class="form-control" id="sex" [(ngModel)]="patientToUpdate.sex" name="sex">
+          </div>
+          <div class="mb-3">
+            <label for="identifier" class="form-label">Identifier</label>
+            <input type="text" class="form-control" id="identifier" [(ngModel)]="patientToUpdate.identifier" name="identifier">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deletePatientModal" tabindex="-1" aria-labelledby="deletePatientModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deletePatientModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete patient {{ patientToDelete?.first_name }} {{ patientToDelete?.last_name }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

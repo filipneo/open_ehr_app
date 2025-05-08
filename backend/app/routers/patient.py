@@ -35,6 +35,23 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
     return patient
 
 
+@router.put("/{patient_id}")
+def update_patient(
+    patient_id: int, patient_update: schemas.PatientUpdate, db: Session = Depends(get_db)
+):
+    db_patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()
+    if not db_patient:
+        raise HTTPException(status_code=404, detail="Patient not found")
+
+    update_data = patient_update.dict(exclude_unset=True)
+    for key, value in update_data.items():
+        setattr(db_patient, key, value)
+
+    db.commit()
+    db.refresh(db_patient)
+    return db_patient
+
+
 @router.delete("/{patient_id}")
 def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(models.Patient).filter(models.Patient.id == patient_id).first()

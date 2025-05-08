@@ -12,6 +12,13 @@ class PatientCreate(BaseModel):
     identifier: str
 
 
+class PatientUpdate(BaseModel):
+    first_name: str
+    last_name: str
+    sex: str
+    identifier: str
+
+
 # Composition
 class CompositionCreate(BaseModel):
     patient_id: int
