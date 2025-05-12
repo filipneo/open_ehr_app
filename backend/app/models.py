@@ -1,7 +1,13 @@
+from datetime import datetime
+
 from sqlalchemy import Column, DateTime, Float, ForeignKey, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
+
+# =========================
+# MAIN TABLES (LATEST ONLY)
+# =========================
 
 
 class Patient(Base):
@@ -11,6 +17,7 @@ class Patient(Base):
     last_name = Column(String(255), nullable=False)
     sex = Column(String(255), nullable=False)
     identifier = Column(String(255), nullable=False)
+    version = Column(Integer, default=1)
 
 
 class Composition(Base):
@@ -85,10 +92,120 @@ class BodyMeasurement(Base):
 
 class ReferenceRange(Base):
     __tablename__ = "reference_range"
-    loinc_code = Column(
-        String(20), primary_key=True
-    )  # Keeping string as primary key since it's a code
+    loinc_code = Column(String(20), primary_key=True)
     low = Column(Float)
     high = Column(Float)
     unit = Column(String(20))
     version = Column(Integer, default=1)
+
+
+# =========================
+# HISTORY TABLES (ARCHIVED)
+# =========================
+
+
+class PatientHistory(Base):
+    __tablename__ = "patient_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    patient_id = Column(Integer, ForeignKey("patient.id"), nullable=False)
+    first_name = Column(String(255), nullable=False)
+    last_name = Column(String(255), nullable=False)
+    sex = Column(String(255), nullable=False)
+    identifier = Column(String(255), nullable=False)
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class CompositionHistory(Base):
+    __tablename__ = "composition_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    composition_id = Column(Integer, ForeignKey("composition.id"), nullable=False)
+    patient_id = Column(Integer)
+    start_time = Column(DateTime)
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class SpecimenHistory(Base):
+    __tablename__ = "specimen_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    specimen_id = Column(Integer, ForeignKey("specimen.id"), nullable=False)
+    specimen_type = Column(String(255))
+    collection_time = Column(DateTime)
+    snomed_code = Column(String(20))
+    description = Column(String(255))
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class LabTestHistory(Base):
+    __tablename__ = "lab_test_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
+    composition_id = Column(Integer)
+    specimen_id = Column(Integer)
+    loinc_code = Column(String(20))
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class LabAnalyteResultHistory(Base):
+    __tablename__ = "lab_analyte_result_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    analyte_id = Column(Integer, ForeignKey("lab_analyte_result.id"), nullable=False)
+    lab_test_id = Column(Integer)
+    loinc_code = Column(String(20))
+    value = Column(Float)
+    unit = Column(String(50))
+    reference_low = Column(Float)
+    reference_high = Column(Float)
+    interpretation = Column(String(20))
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class CBCPanelHistory(Base):
+    __tablename__ = "cbc_panel_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    panel_id = Column(Integer, ForeignKey("cbc_panel.id"), nullable=False)
+    lab_test_id = Column(Integer)
+    hemoglobin_id = Column(Integer)
+    white_cell_id = Column(Integer)
+    platelet_id = Column(Integer)
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class BloodTypePanelHistory(Base):
+    __tablename__ = "blood_type_panel_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    panel_id = Column(Integer, ForeignKey("blood_type_panel.id"), nullable=False)
+    lab_test_id = Column(Integer)
+    abo_id = Column(Integer)
+    rh_id = Column(Integer)
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class BodyMeasurementHistory(Base):
+    __tablename__ = "body_measurement_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    measurement_id = Column(Integer, ForeignKey("body_measurement.id"), nullable=False)
+    patient_id = Column(Integer)
+    record_time = Column(DateTime)
+    value = Column(Float)
+    unit = Column(String(20))
+    snomed_code = Column(String(20))
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
+
+
+class ReferenceRangeHistory(Base):
+    __tablename__ = "reference_range_history"
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    loinc_code = Column(String(20))
+    low = Column(Float)
+    high = Column(Float)
+    unit = Column(String(20))
+    version = Column(Integer)
+    updated_at = Column(DateTime, default=datetime.utcnow)
