@@ -19,6 +19,9 @@ def get_db():
 
 
 @router.post("/", response_model=PatientSchema)
+# Create a new patient
+# Operation: CREATE
+# Description: Adds a new patient to the database with versioning.
 def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db)):
     patient = Patient(**patient_in.dict(), version=1)
     db.add(patient)
@@ -28,11 +31,17 @@ def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/", response_model=list[PatientSchema])
+# List all patients
+# Operation: READ (LIST)
+# Description: Retrieves all patients from the database.
 def list_patients(db: Session = Depends(get_db)):
     return db.query(Patient).all()
 
 
 @router.get("/{patient_id}", response_model=PatientSchema)
+# Get a specific patient by ID
+# Operation: READ (GET)
+# Description: Retrieves a single patient by its ID.
 def get_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
@@ -41,6 +50,9 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/{patient_id}", response_model=PatientSchema)
+# Update a specific patient by ID
+# Operation: UPDATE
+# Description: Updates a patient and archives the previous state in the history table.
 def update_patient(patient_id: int, patient_in: PatientUpdate, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
@@ -69,6 +81,9 @@ def update_patient(patient_id: int, patient_in: PatientUpdate, db: Session = Dep
 
 
 @router.delete("/{patient_id}")
+# Delete a specific patient by ID
+# Operation: DELETE
+# Description: Deletes a patient and its associated history records.
 def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     patient = db.query(Patient).filter(Patient.id == patient_id).first()
     if not patient:
@@ -81,19 +96,3 @@ def delete_patient(patient_id: int, db: Session = Depends(get_db)):
     db.delete(patient)
     db.commit()
     return {"ok": True}
-
-
-# @router.get("/{patient_id}/history", response_model=list[Patient])
-# def get_patient_history(patient_id: int, db: Session = Depends(get_db)):
-#     history = db.query(PatientHistory).filter(PatientHistory.patient_id == patient_id).all()
-#     return [
-#         Patient(
-#             id=record.patient_id,
-#             first_name=record.first_name,
-#             last_name=record.last_name,
-#             sex=record.sex,
-#             identifier=record.identifier,
-#             version=record.version,
-#         )
-#         for record in history
-#     ]

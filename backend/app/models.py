@@ -120,8 +120,8 @@ class CompositionHistory(Base):
     __tablename__ = "composition_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
     composition_id = Column(Integer, ForeignKey("composition.id"), nullable=False)
-    patient_id = Column(Integer)
-    start_time = Column(DateTime)
+    patient_id = Column(Integer, ForeignKey("patient.id"), nullable=False)
+    start_time = Column(DateTime, nullable=False)
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
@@ -130,8 +130,8 @@ class SpecimenHistory(Base):
     __tablename__ = "specimen_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
     specimen_id = Column(Integer, ForeignKey("specimen.id"), nullable=False)
-    specimen_type = Column(String(255))
-    collection_time = Column(DateTime)
+    specimen_type = Column(String(255), nullable=False)
+    collection_time = Column(DateTime, nullable=False)
     snomed_code = Column(String(20))
     description = Column(String(255))
     version = Column(Integer)
@@ -142,8 +142,8 @@ class LabTestHistory(Base):
     __tablename__ = "lab_test_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
     lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
-    composition_id = Column(Integer)
-    specimen_id = Column(Integer)
+    composition_id = Column(Integer, ForeignKey("composition.id"), nullable=False)
+    specimen_id = Column(Integer, ForeignKey("specimen.id"), nullable=False)
     loinc_code = Column(String(20))
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
@@ -152,11 +152,11 @@ class LabTestHistory(Base):
 class LabAnalyteResultHistory(Base):
     __tablename__ = "lab_analyte_result_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    analyte_id = Column(Integer, ForeignKey("lab_analyte_result.id"), nullable=False)
-    lab_test_id = Column(Integer)
-    loinc_code = Column(String(20))
-    value = Column(Float)
-    unit = Column(String(50))
+    lab_analyte_result_id = Column(Integer, ForeignKey("lab_analyte_result.id"), nullable=False)
+    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
+    loinc_code = Column(String(20), nullable=False)
+    value = Column(Float, nullable=False)
+    unit = Column(String(50), nullable=False)
     reference_low = Column(Float)
     reference_high = Column(Float)
     interpretation = Column(String(20))
@@ -167,11 +167,11 @@ class LabAnalyteResultHistory(Base):
 class CBCPanelHistory(Base):
     __tablename__ = "cbc_panel_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    panel_id = Column(Integer, ForeignKey("cbc_panel.id"), nullable=False)
-    lab_test_id = Column(Integer)
-    hemoglobin_id = Column(Integer)
-    white_cell_id = Column(Integer)
-    platelet_id = Column(Integer)
+    cbc_panel_id = Column(Integer, ForeignKey("cbc_panel.id"), nullable=False)
+    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
+    hemoglobin_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
+    white_cell_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
+    platelet_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
@@ -179,10 +179,10 @@ class CBCPanelHistory(Base):
 class BloodTypePanelHistory(Base):
     __tablename__ = "blood_type_panel_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    panel_id = Column(Integer, ForeignKey("blood_type_panel.id"), nullable=False)
-    lab_test_id = Column(Integer)
-    abo_id = Column(Integer)
-    rh_id = Column(Integer)
+    blood_type_panel_id = Column(Integer, ForeignKey("blood_type_panel.id"), nullable=False)
+    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
+    abo_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
+    rh_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
@@ -190,12 +190,12 @@ class BloodTypePanelHistory(Base):
 class BodyMeasurementHistory(Base):
     __tablename__ = "body_measurement_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    measurement_id = Column(Integer, ForeignKey("body_measurement.id"), nullable=False)
-    patient_id = Column(Integer)
-    record_time = Column(DateTime)
-    value = Column(Float)
-    unit = Column(String(20))
-    snomed_code = Column(String(20))
+    body_measurement_id = Column(Integer, ForeignKey("body_measurement.id"), nullable=False)
+    patient_id = Column(Integer, ForeignKey("patient.id"), nullable=False)
+    record_time = Column(DateTime, nullable=False)
+    value = Column(Float, nullable=False)
+    unit = Column(String(20), nullable=False)
+    snomed_code = Column(String(20), nullable=False)
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
@@ -203,7 +203,10 @@ class BodyMeasurementHistory(Base):
 class ReferenceRangeHistory(Base):
     __tablename__ = "reference_range_history"
     id = Column(Integer, primary_key=True, autoincrement=True)
-    loinc_code = Column(String(20))
+    reference_range_loinc_code = Column(
+        String(20), ForeignKey("reference_range.loinc_code"), nullable=False
+    )
+    loinc_code = Column(String(20), nullable=False)
     low = Column(Float)
     high = Column(Float)
     unit = Column(String(20))

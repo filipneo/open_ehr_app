@@ -1,4 +1,9 @@
-from app import database, models, schemas
+from datetime import datetime
+
+from app import database
+from app.models import Composition, CompositionHistory
+from app.schemas import Composition as CompositionSchema
+from app.schemas import CompositionCreate, CompositionUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -13,37 +18,84 @@ def get_db():
         db.close()
 
 
-@router.post("/")
-def create_composition(composition: schemas.CompositionCreate, db: Session = Depends(get_db)):
-    db_composition = models.Composition(**composition.dict())
+@router.post("/", response_model=CompositionSchema)
+# Create a new composition
+# Operation: CREATE
+# Description: Adds a new composition to the database with versioning.
+def create_composition(composition: CompositionCreate, db: Session = Depends(get_db)):
+    db_composition = Composition(**composition.dict(), version=1)
     db.add(db_composition)
     db.commit()
     db.refresh(db_composition)
     return db_composition
 
 
-@router.get("/")
+@router.get("/", response_model=list[CompositionSchema])
+# List all compositions
+# Operation: READ (LIST)
+# Description: Retrieves all compositions from the database.
 def list_compositions(db: Session = Depends(get_db)):
-    return db.query(models.Composition).all()
+    return db.query(Composition).all()
 
 
-@router.get("/{composition_id}")
+@router.get("/{composition_id}", response_model=CompositionSchema)
+# Get a specific composition by ID
+# Operation: READ (GET)
+# Description: Retrieves a single composition by its ID.
 def get_composition(composition_id: int, db: Session = Depends(get_db)):
-    composition = (
-        db.query(models.Composition).filter(models.Composition.id == composition_id).first()
-    )
+    composition = db.query(Composition).filter(Composition.id == composition_id).first()
     if not composition:
         raise HTTPException(status_code=404, detail="Composition not found")
     return composition
 
 
-@router.delete("/{composition_id}")
-def delete_composition(composition_id: int, db: Session = Depends(get_db)):
-    composition = (
-        db.query(models.Composition).filter(models.Composition.id == composition_id).first()
-    )
-    if not composition:
+@router.put("/{composition_id}", response_model=CompositionSchema)
+# Update a specific composition by ID
+# Operation: UPDATE
+# Description: Updates a composition and archives the previous state in the history table.
+def update_composition(
+    composition_id: int,
+    composition_in: CompositionUpdate,
+    db: Session = Depends(get_db),
+):
+    db_composition = db.query(Composition).filter(Composition.id == composition_id).first()
+    if not db_composition:
         raise HTTPException(status_code=404, detail="Composition not found")
-    db.delete(composition)
+
+    # Archive current state
+    history = CompositionHistory(
+        composition_id=db_composition.id,
+        patient_id=db_composition.patient_id,
+        start_time=db_composition.start_time,
+        version=db_composition.version,
+        updated_at=datetime.utcnow(),
+    )
+    db.add(history)
+
+    # Apply update
+    for field, value in composition_in.dict(exclude_unset=True).items():
+        setattr(db_composition, field, value)
+    setattr(db_composition, "version", db_composition.version + 1)
+
     db.commit()
-    return {"message": "Composition deleted successfully"}
+    db.refresh(db_composition)
+    return db_composition
+
+
+@router.delete("/{composition_id}")
+# Delete a specific composition by ID
+# Operation: DELETE
+# Description: Deletes a composition and its associated history records.
+def delete_composition(composition_id: int, db: Session = Depends(get_db)):
+    db_composition = db.query(Composition).filter(Composition.id == composition_id).first()
+    if not db_composition:
+        raise HTTPException(status_code=404, detail="Composition not found")
+
+    # Delete from history table
+    db.query(CompositionHistory).filter(
+        CompositionHistory.composition_id == composition_id
+    ).delete()
+
+    db.delete(db_composition)
+    db.commit()
+    return {"ok": True}
