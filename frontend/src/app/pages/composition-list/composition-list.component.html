@@ -35,17 +35,17 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">
-          <div class="mb-3">
-            <label for="createPatientId" class="form-label">Patient</label>
+        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+            <label for="createPatientId" class="form-label">Patient <span class="text-danger">*</span></label>
             <select class="form-control" id="createPatientId" [(ngModel)]="compositionToCreate.patient_id" name="createPatientId" required>
+              <option value="" disabled selected>Select Patient</option>
               <option *ngFor="let patient of patients" [value]="patient.id">
                 {{ patient.first_name }} {{ patient.last_name }}
               </option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="createStartTime" class="form-label">Start Time</label>
+            <label for="createStartTime" class="form-label">Start Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="createStartTime" [(ngModel)]="compositionToCreate.start_time" name="createStartTime" required>
           </div>
           <button type="submit" class="btn btn-primary">Create Composition</button>
@@ -64,9 +64,8 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form *ngIf="compositionToUpdate" (ngSubmit)="onUpdateSubmit()">
-          <div class="mb-3">
-            <label for="updatePatientId" class="form-label">Patient</label>
+        <form *ngIf="compositionToUpdate" (ngSubmit)="onUpdateSubmit()">          <div class="mb-3">
+            <label for="updatePatientId" class="form-label">Patient <span class="text-danger">*</span></label>
             <select class="form-control" id="updatePatientId" [(ngModel)]="compositionToUpdate.patient_id" name="updatePatientId" required>
               <option *ngFor="let patient of patients" [value]="patient.id">
                 {{ patient.first_name }} {{ patient.last_name }}
@@ -74,12 +73,8 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="updateStartTime" class="form-label">Start Time</label>
+            <label for="updateStartTime" class="form-label">Start Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="updateStartTime" [(ngModel)]="compositionToUpdate.start_time" name="updateStartTime" required>
-          </div>
-          <div class="mb-3">
-            <label for="updateVersion" class="form-label">Version</label>
-            <input type="number" class="form-control" id="updateVersion" [(ngModel)]="compositionToUpdate.version" name="updateVersion">
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

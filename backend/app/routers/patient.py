@@ -7,7 +7,7 @@ from app.schemas import PatientCreate, PatientUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/patients", tags=["Patients"])
+router = APIRouter(prefix="/patient", tags=["Patient"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=PatientSchema)
+@router.post("/create", response_model=PatientSchema)
 # Create a new patient
 # Operation: CREATE
 # Description: Adds a new patient to the database with versioning.
@@ -30,7 +30,7 @@ def create_patient(patient_in: PatientCreate, db: Session = Depends(get_db)):
     return patient
 
 
-@router.get("/", response_model=list[PatientSchema])
+@router.get("/all", response_model=list[PatientSchema])
 # List all patients
 # Operation: READ (LIST)
 # Description: Retrieves all patients from the database.
@@ -49,7 +49,7 @@ def get_patient(patient_id: int, db: Session = Depends(get_db)):
     return patient
 
 
-@router.put("/{patient_id}", response_model=PatientSchema)
+@router.put("/update/{patient_id}", response_model=PatientSchema)
 # Update a specific patient by ID
 # Operation: UPDATE
 # Description: Updates a patient and archives the previous state in the history table.
@@ -80,7 +80,7 @@ def update_patient(patient_id: int, patient_in: PatientUpdate, db: Session = Dep
     return patient
 
 
-@router.delete("/{patient_id}")
+@router.delete("/delete/{patient_id}")
 # Delete a specific patient by ID
 # Operation: DELETE
 # Description: Deletes a patient and its associated history records.

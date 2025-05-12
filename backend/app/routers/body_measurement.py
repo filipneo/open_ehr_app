@@ -7,7 +7,7 @@ from app.schemas import BodyMeasurementCreate, BodyMeasurementUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/body_measurements", tags=["body_measurements"])
+router = APIRouter(prefix="/body_measurement", tags=["Body Measurement"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=BodyMeasurementSchema)
+@router.post("/create", response_model=BodyMeasurementSchema)
 # Create a new body measurement
 # Operation: CREATE
 # Description: Adds a new body measurement to the database with versioning.
@@ -30,7 +30,7 @@ def create_body_measurement(body_measurement: BodyMeasurementCreate, db: Session
     return db_body_measurement
 
 
-@router.get("/", response_model=list[BodyMeasurementSchema])
+@router.get("/all", response_model=list[BodyMeasurementSchema])
 # List all body measurements
 # Operation: READ (LIST)
 # Description: Retrieves all body measurements from the database.
@@ -51,7 +51,7 @@ def get_body_measurement(body_measurement_id: int, db: Session = Depends(get_db)
     return body_measurement
 
 
-@router.put("/{body_measurement_id}", response_model=BodyMeasurementSchema)
+@router.put("/update/{body_measurement_id}", response_model=BodyMeasurementSchema)
 # Update a specific body measurement by ID
 # Operation: UPDATE
 # Description: Updates a body measurement and archives the previous state in the history table.
@@ -89,7 +89,7 @@ def update_body_measurement(
     return db_body_measurement
 
 
-@router.delete("/{body_measurement_id}")
+@router.delete("/delete/{body_measurement_id}")
 # Delete a specific body measurement by ID
 # Operation: DELETE
 # Description: Deletes a body measurement and its associated history records.

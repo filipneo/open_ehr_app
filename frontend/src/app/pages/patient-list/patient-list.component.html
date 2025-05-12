@@ -2,23 +2,23 @@
   <h2>Patient List</h2>
   <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Patient</button>
   <table class="table table-striped">
-    <thead>
-      <tr>
+    <thead>      <tr>
         <th>ID</th>
         <th>First Name</th>
         <th>Last Name</th>
         <th>Sex</th>
         <th>Identifier</th>
+        <th>Version</th>
         <th>Actions</th>      
       </tr>
     </thead>
-    <tbody>
-      <tr *ngFor="let patient of patients">
+    <tbody>      <tr *ngFor="let patient of patients">
         <td>{{ patient.id }}</td>
         <td>{{ patient.first_name }}</td>
         <td>{{ patient.last_name }}</td>
         <td>{{ patient.sex }}</td>
-        <td>{{ patient.identifier }}</td>
+        <td>{{ patient.identifier || 'N/A' }}</td>
+        <td>{{ patient.version }}</td>
         <td>
           <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(patient)">Update</button>
           <button class="btn btn-sm btn-danger" (click)="openDeleteModal(patient)">Delete</button>
@@ -37,17 +37,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">
-          <div class="mb-3">
-            <label for="createFirstName" class="form-label">First Name</label>
+        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+            <label for="createFirstName" class="form-label">First Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createFirstName" [(ngModel)]="patientToCreate.first_name" name="createFirstName" required>
           </div>
           <div class="mb-3">
-            <label for="createLastName" class="form-label">Last Name</label>
+            <label for="createLastName" class="form-label">Last Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createLastName" [(ngModel)]="patientToCreate.last_name" name="createLastName" required>
           </div>
           <div class="mb-3">
-            <label for="createSex" class="form-label">Sex</label>
+            <label for="createSex" class="form-label">Sex <span class="text-danger">*</span></label>
             <select class="form-control" id="createSex" [(ngModel)]="patientToCreate.sex" name="createSex" required>
               <option value="" disabled selected>Select Sex</option>
               <option value="male">Male</option>
@@ -57,6 +56,7 @@
           <div class="mb-3">
             <label for="createIdentifier" class="form-label">Identifier</label>
             <input type="text" class="form-control" id="createIdentifier" [(ngModel)]="patientToCreate.identifier" name="createIdentifier">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Create Patient</button>
         </form>
@@ -74,17 +74,16 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form *ngIf="patientToUpdate" (ngSubmit)="onUpdateSubmit()">
-          <div class="mb-3">
-            <label for="firstName" class="form-label">First Name</label>
+        <form *ngIf="patientToUpdate" (ngSubmit)="onUpdateSubmit()">          <div class="mb-3">
+            <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="firstName" [(ngModel)]="patientToUpdate.first_name" name="firstName" required>
           </div>
           <div class="mb-3">
-            <label for="lastName" class="form-label">Last Name</label>
+            <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="lastName" [(ngModel)]="patientToUpdate.last_name" name="lastName" required>
           </div>
           <div class="mb-3">
-            <label for="sex" class="form-label">Sex</label>
+            <label for="sex" class="form-label">Sex <span class="text-danger">*</span></label>
             <select class="form-control" id="sex" [(ngModel)]="patientToUpdate.sex" name="sex" required>
               <option value="" disabled selected>Select Sex</option>
               <option value="male">Male</option>
@@ -94,6 +93,7 @@
           <div class="mb-3">
             <label for="identifier" class="form-label">Identifier</label>
             <input type="text" class="form-control" id="identifier" [(ngModel)]="patientToUpdate.identifier" name="identifier">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

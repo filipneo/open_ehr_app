@@ -7,7 +7,7 @@ from app.schemas import ReferenceRangeCreate, ReferenceRangeUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/reference_ranges", tags=["reference_ranges"])
+router = APIRouter(prefix="/reference_range", tags=["Reference Range"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=ReferenceRangeSchema)
+@router.post("/create", response_model=ReferenceRangeSchema)
 # Create a new reference range
 # Operation: CREATE
 # Description: Adds a new reference range to the database with versioning.
@@ -30,7 +30,7 @@ def create_reference_range(reference_range: ReferenceRangeCreate, db: Session = 
     return db_reference_range
 
 
-@router.get("/", response_model=list[ReferenceRangeSchema])
+@router.get("/all", response_model=list[ReferenceRangeSchema])
 # List all reference ranges
 # Operation: READ (LIST)
 # Description: Retrieves all reference ranges from the database.
@@ -51,7 +51,7 @@ def get_reference_range(loinc_code: str, db: Session = Depends(get_db)):
     return reference_range
 
 
-@router.put("/{loinc_code}", response_model=ReferenceRangeSchema)
+@router.put("/update/{loinc_code}", response_model=ReferenceRangeSchema)
 # Update a specific reference range by LOINC code
 # Operation: UPDATE
 # Description: Updates a reference range and archives the previous state in the history table.
@@ -87,7 +87,7 @@ def update_reference_range(
     return db_reference_range
 
 
-@router.delete("/{loinc_code}")
+@router.delete("/delete/{loinc_code}")
 # Delete a specific reference range by LOINC code
 # Operation: DELETE
 # Description: Deletes a reference range and its associated history records.

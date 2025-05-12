@@ -42,28 +42,27 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">
-          <div class="mb-3">
-            <label for="createPatientId" class="form-label">Patient</label>
+        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+            <label for="createPatientId" class="form-label">Patient <span class="text-danger">*</span></label>
             <select class="form-control" id="createPatientId" [(ngModel)]="measurementToCreate.patient_id" name="patient_id" required>
+              <option [ngValue]="undefined" disabled selected>Select Patient</option>
               <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.first_name }} {{ patient.last_name }}</option>
             </select>
-          </div>
-          <div class="mb-3">
-            <label for="createRecordTime" class="form-label">Record Time</label>
+          </div>          <div class="mb-3">
+            <label for="createRecordTime" class="form-label">Record Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="createRecordTime" [(ngModel)]="measurementToCreate.record_time" name="record_time" required>
           </div>
           <div class="mb-3">
-            <label for="createValue" class="form-label">Value</label>
-            <input type="number" class="form-control" id="createValue" [(ngModel)]="measurementToCreate.value" name="value" required>
+            <label for="createValue" class="form-label">Value <span class="text-danger">*</span></label>
+            <input type="number" step="0.01" class="form-control" id="createValue" [(ngModel)]="measurementToCreate.value" name="value" required>
           </div>
           <div class="mb-3">
-            <label for="createUnit" class="form-label">Unit</label>
+            <label for="createUnit" class="form-label">Unit <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createUnit" [(ngModel)]="measurementToCreate.unit" name="unit" required>
           </div>
           <div class="mb-3">
-            <label for="createSnomedCode" class="form-label">SNOMED Code</label>
-            <input type="text" class="form-control" id="createSnomedCode" [(ngModel)]="measurementToCreate.snomed_code" name="snomed_code">
+            <label for="createSnomedCode" class="form-label">SNOMED Code <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="createSnomedCode" [(ngModel)]="measurementToCreate.snomed_code" name="snomed_code" required>
           </div>
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
@@ -82,28 +81,26 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="onUpdateSubmit()">
-          <input type="hidden" [(ngModel)]="measurementToUpdate.id" name="id_update">
-          <div class="mb-3">
-            <label for="updatePatientId" class="form-label">Patient</label>
+          <input type="hidden" [(ngModel)]="measurementToUpdate.id" name="id_update">          <div class="mb-3">
+            <label for="updatePatientId" class="form-label">Patient <span class="text-danger">*</span></label>
             <select class="form-control" id="updatePatientId" [(ngModel)]="measurementToUpdate.patient_id" name="patient_id_update" required>
               <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.first_name }} {{ patient.last_name }}</option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="updateRecordTime" class="form-label">Record Time</label>
+            <label for="updateRecordTime" class="form-label">Record Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="updateRecordTime" [(ngModel)]="measurementToUpdate.record_time" name="record_time_update" required>
           </div>
           <div class="mb-3">
-            <label for="updateValue" class="form-label">Value</label>
-            <input type="number" class="form-control" id="updateValue" [(ngModel)]="measurementToUpdate.value" name="value_update" required>
+            <label for="updateValue" class="form-label">Value <span class="text-danger">*</span></label>
+            <input type="number" step="0.01" class="form-control" id="updateValue" [(ngModel)]="measurementToUpdate.value" name="value_update" required>
           </div>
           <div class="mb-3">
-            <label for="updateUnit" class="form-label">Unit</label>
+            <label for="updateUnit" class="form-label">Unit <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="updateUnit" [(ngModel)]="measurementToUpdate.unit" name="unit_update" required>
-          </div>
-          <div class="mb-3">
-            <label for="updateSnomedCode" class="form-label">SNOMED Code</label>
-            <input type="text" class="form-control" id="updateSnomedCode" [(ngModel)]="measurementToUpdate.snomed_code" name="snomed_code_update">
+          </div>          <div class="mb-3">
+            <label for="updateSnomedCode" class="form-label">SNOMED Code <span class="text-danger">*</span></label>
+            <input type="text" class="form-control" id="updateSnomedCode" [(ngModel)]="measurementToUpdate.snomed_code" name="snomed_code_update" required>
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

@@ -4,46 +4,46 @@ import { Observable } from 'rxjs';
 
 export interface ReferenceRange {
   loinc_code: string;
-  low?: number;
-  high?: number;
-  unit?: string;
-  version?: number;
+  low: number | null;
+  high: number | null;
+  unit: string | null;
+  version: number;
 }
 
 export interface ReferenceRangeCreatePayload {
   loinc_code: string;
-  low?: number;
-  high?: number;
-  unit?: string;
+  low?: number | null;
+  high?: number | null;
+  unit?: string | null;
 }
 
 export interface ReferenceRangeUpdatePayload {
-  low?: number;
-  high?: number;
-  unit?: string;
+  low?: number | null;
+  high?: number | null;
+  unit?: string | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReferenceRangeService {
-  private apiUrl = 'http://localhost:8000/reference_ranges';
+  private apiUrl = 'http://localhost:8000/reference_range';
 
   constructor(private http: HttpClient) { }
 
   getReferenceRanges(): Observable<ReferenceRange[]> {
-    return this.http.get<ReferenceRange[]>(this.apiUrl);
+    return this.http.get<ReferenceRange[]>(`${this.apiUrl}/all`);
   }
 
   createReferenceRange(range: ReferenceRangeCreatePayload): Observable<ReferenceRange> {
-    return this.http.post<ReferenceRange>(this.apiUrl, range);
+    return this.http.post<ReferenceRange>(`${this.apiUrl}/create`, range);
   }
 
   updateReferenceRange(loinc_code: string, range: ReferenceRangeUpdatePayload): Observable<ReferenceRange> {
-    return this.http.put<ReferenceRange>(`${this.apiUrl}/${loinc_code}`, range);
+    return this.http.put<ReferenceRange>(`${this.apiUrl}/update/${loinc_code}`, range);
   }
 
   deleteReferenceRange(loinc_code: string): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${loinc_code}`);
+    return this.http.delete(`${this.apiUrl}/delete/${loinc_code}`);
   }
 }

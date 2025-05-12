@@ -8,7 +8,6 @@ import {
   LabAnalyteResultUpdatePayload
 } from '../../services/lab-analyte.service';
 import { LabTest, LabTestService } from '../../services/lab-test.service';
-import { ReferenceRange, ReferenceRangeService } from '../../services/reference-range.service';
 
 declare var bootstrap: any;
 
@@ -22,29 +21,29 @@ declare var bootstrap: any;
 export class LabAnalyteListComponent implements OnInit, AfterViewInit {
   labAnalyteResults: LabAnalyteResult[] = [];
   labTests: LabTest[] = [];
-  referenceRanges: ReferenceRange[] = [];
 
   createFormModel: LabAnalyteResultCreatePayload = {
     lab_test_id: 0, // Will be updated in loadLabTests or openCreateModal
     loinc_code: '',
-    value: '',
-    unit: null,
+    value: 0,
+    unit: '',
     reference_low: null,
     reference_high: null,
-    interpretation: null,
-    reference_range_loinc_code: null
+    interpretation: null
   };
-  updateFormModel: LabAnalyteResultUpdatePayload & { id?: number } = {
+  
+  updateFormModel: LabAnalyteResultUpdatePayload & { id?: number, version?: number } = {
     id: undefined,
     lab_test_id: 0,
     loinc_code: '',
-    value: '',
-    unit: null,
+    value: 0,
+    unit: '',
     reference_low: null,
     reference_high: null,
     interpretation: null,
-    reference_range_loinc_code: null
+    version: 1
   };
+  
   analyteToDelete: LabAnalyteResult | null = null;
 
   private createModal: any;
@@ -53,14 +52,12 @@ export class LabAnalyteListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private labAnalyteService: LabAnalyteService,
-    private labTestService: LabTestService,
-    private referenceRangeService: ReferenceRangeService
+    private labTestService: LabTestService
   ) { }
 
   ngOnInit(): void {
     this.loadLabAnalyteResults();
     this.loadLabTests();
-    this.loadReferenceRanges();
   }
 
   ngAfterViewInit(): void {
@@ -86,68 +83,41 @@ export class LabAnalyteListComponent implements OnInit, AfterViewInit {
   loadLabTests(): void {
     this.labTestService.getLabTests().subscribe((data: LabTest[]) => {
       this.labTests = data;
-      if (this.labTests.length > 0 && (this.createFormModel.lab_test_id === 0 || !this.createFormModel.lab_test_id) ) {
+      if (this.labTests.length > 0 && (this.createFormModel.lab_test_id === 0 || !this.createFormModel.lab_test_id)) {
         this.createFormModel.lab_test_id = this.labTests[0].id;
       }
     });
   }
 
-  loadReferenceRanges(): void {
-    this.referenceRangeService.getReferenceRanges().subscribe((data: ReferenceRange[]) => {
-      this.referenceRanges = data;
-      // Optional: set default reference range if needed
-      if (this.referenceRanges.length > 0 && !this.createFormModel.reference_range_loinc_code) {
-        // this.createFormModel.reference_range_loinc_code = this.referenceRanges[0].loinc_code;
-      }
-    });
-  }
-
   getLabTestName(labTestId: number): string {
-    const labTest = this.labTests.find(lt => lt.id === labTestId);
-    return labTest ? labTest.name : 'Unknown Lab Test';
-  }
-
-  getReferenceRangeDisplay(loincCode?: string | null): string {
-    if (!loincCode) return 'N/A';
-    const range = this.referenceRanges.find(rr => rr.loinc_code === loincCode);
-    if (!range) return 'Unknown Reference Range';
-    
-    let display = `LOINC: ${range.loinc_code}`;
-    if (range.low !== undefined && range.high !== undefined) {
-      display += ` (Range: ${range.low}-${range.high} ${range.unit || ''})`;
-    } else if (range.low !== undefined) {
-      display += ` (Low: ${range.low} ${range.unit || ''})`;
-    } else if (range.high !== undefined) {
-      display += ` (High: ${range.high} ${range.unit || ''})`;
-    } else if (range.unit) {
-      display += ` (Unit: ${range.unit})`;
-    }
-    return display;
+    const test = this.labTests.find(lt => lt.id === labTestId);
+    return test ? `Lab Test ID: ${test.id}` : 'Unknown Lab Test';
   }
 
   openCreateModal(): void {
     this.createFormModel = {
       lab_test_id: this.labTests.length > 0 ? this.labTests[0].id : 0,
       loinc_code: '',
-      value: '',
-      unit: '', // Default to empty string for form binding, will be converted to null if empty
-      reference_low: '',
-      reference_high: '',
-      interpretation: '',
-      reference_range_loinc_code: this.referenceRanges.length > 0 ? this.referenceRanges[0].loinc_code : undefined
+      value: 0,
+      unit: '',
+      reference_low: null,
+      reference_high: null,
+      interpretation: null
     };
     if (this.createModal) this.createModal.show();
   }
 
   onCreateSubmit(): void {
     const payload: LabAnalyteResultCreatePayload = {
-      ...this.createFormModel,
-      unit: this.createFormModel.unit === '' ? null : this.createFormModel.unit,
-      reference_low: this.createFormModel.reference_low === '' ? null : this.createFormModel.reference_low,
-      reference_high: this.createFormModel.reference_high === '' ? null : this.createFormModel.reference_high,
-      interpretation: this.createFormModel.interpretation === '' ? null : this.createFormModel.interpretation,
-      reference_range_loinc_code: this.createFormModel.reference_range_loinc_code === undefined || this.createFormModel.reference_range_loinc_code === '' ? null : this.createFormModel.reference_range_loinc_code
+      lab_test_id: this.createFormModel.lab_test_id,
+      loinc_code: this.createFormModel.loinc_code,
+      value: this.createFormModel.value,
+      unit: this.createFormModel.unit,
+      reference_low: this.createFormModel.reference_low,
+      reference_high: this.createFormModel.reference_high,
+      interpretation: this.createFormModel.interpretation
     };
+    
     this.labAnalyteService.createLabAnalyteResult(payload).subscribe(() => {
       this.loadLabAnalyteResults();
       if (this.createModal) this.createModal.hide();
@@ -160,27 +130,32 @@ export class LabAnalyteListComponent implements OnInit, AfterViewInit {
       lab_test_id: analyte.lab_test_id,
       loinc_code: analyte.loinc_code,
       value: analyte.value,
-      unit: analyte.unit || '', // Default to empty string for form binding
-      reference_low: analyte.reference_low || '',
-      reference_high: analyte.reference_high || '',
-      interpretation: analyte.interpretation || '',
-      reference_range_loinc_code: analyte.reference_range_loinc_code === null ? undefined : analyte.reference_range_loinc_code
+      unit: analyte.unit,
+      reference_low: analyte.reference_low,
+      reference_high: analyte.reference_high,
+      interpretation: analyte.interpretation,
+      version: analyte.version
     };
     if (this.updateModal) this.updateModal.show();
   }
 
   onUpdateSubmit(): void {
-    if (!this.updateFormModel.id) return;
-    const { id, ...data } = this.updateFormModel;
+    if (!this.updateFormModel.id) {
+      console.error("Cannot update without an ID.");
+      return;
+    }
+    
     const payload: LabAnalyteResultUpdatePayload = {
-      ...data,
-      unit: data.unit === '' ? null : data.unit,
-      reference_low: data.reference_low === '' ? null : data.reference_low,
-      reference_high: data.reference_high === '' ? null : data.reference_high,
-      interpretation: data.interpretation === '' ? null : data.interpretation,
-      reference_range_loinc_code: data.reference_range_loinc_code === undefined || data.reference_range_loinc_code === '' ? null : data.reference_range_loinc_code
+      lab_test_id: this.updateFormModel.lab_test_id,
+      loinc_code: this.updateFormModel.loinc_code,
+      value: this.updateFormModel.value,
+      unit: this.updateFormModel.unit,
+      reference_low: this.updateFormModel.reference_low,
+      reference_high: this.updateFormModel.reference_high,
+      interpretation: this.updateFormModel.interpretation
     };
-    this.labAnalyteService.updateLabAnalyteResult(id, payload).subscribe(() => {
+    
+    this.labAnalyteService.updateLabAnalyteResult(this.updateFormModel.id, payload).subscribe(() => {
       this.loadLabAnalyteResults();
       if (this.updateModal) this.updateModal.hide();
     });

@@ -7,7 +7,7 @@ from app.schemas import CompositionCreate, CompositionUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/compositions", tags=["compositions"])
+router = APIRouter(prefix="/composition", tags=["Composition"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=CompositionSchema)
+@router.post("/create", response_model=CompositionSchema)
 # Create a new composition
 # Operation: CREATE
 # Description: Adds a new composition to the database with versioning.
@@ -30,7 +30,7 @@ def create_composition(composition: CompositionCreate, db: Session = Depends(get
     return db_composition
 
 
-@router.get("/", response_model=list[CompositionSchema])
+@router.get("/all", response_model=list[CompositionSchema])
 # List all compositions
 # Operation: READ (LIST)
 # Description: Retrieves all compositions from the database.
@@ -49,7 +49,7 @@ def get_composition(composition_id: int, db: Session = Depends(get_db)):
     return composition
 
 
-@router.put("/{composition_id}", response_model=CompositionSchema)
+@router.put("/update/{composition_id}", response_model=CompositionSchema)
 # Update a specific composition by ID
 # Operation: UPDATE
 # Description: Updates a composition and archives the previous state in the history table.
@@ -82,7 +82,7 @@ def update_composition(
     return db_composition
 
 
-@router.delete("/{composition_id}")
+@router.delete("/delete/{composition_id}")
 # Delete a specific composition by ID
 # Operation: DELETE
 # Description: Deletes a composition and its associated history records.

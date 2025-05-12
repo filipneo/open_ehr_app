@@ -23,8 +23,6 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
 
   // Form model for creating a LabTest
   createFormModel = {
-    name: '',
-    description: '',
     loinc_code: '',
     composition_id: undefined as number | undefined,
     specimen_id: undefined as number | undefined,
@@ -33,11 +31,10 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
   // Form model for updating a LabTest
   updateFormModel = {
     id: undefined as number | undefined,
-    name: '',
-    description: '',
     loinc_code: '',
     composition_id: undefined as number | undefined,
     specimen_id: undefined as number | undefined,
+    version: 1
   };
 
   testToDelete: LabTest | null = null;
@@ -123,8 +120,6 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
 
   openCreateModal(): void {
     this.createFormModel = {
-      name: '',
-      description: '',
       loinc_code: '',
       composition_id: this.compositions.length > 0 ? this.compositions[0].id : undefined,
       specimen_id: this.specimens.length > 0 ? this.specimens[0].id : undefined,
@@ -133,12 +128,16 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
   }
 
   onCreateSubmit(): void {
+    // Ensure that composition_id and specimen_id are defined
+    if (this.createFormModel.composition_id === undefined || this.createFormModel.specimen_id === undefined) {
+      alert('Composition and Specimen are required fields');
+      return;
+    }
+    
     const payload: LabTestCreatePayload = {
-      name: this.createFormModel.name,
-      description: this.createFormModel.description === '' ? null : this.createFormModel.description,
-      loinc_code: this.createFormModel.loinc_code === '' ? null : this.createFormModel.loinc_code,
-      composition_id: this.createFormModel.composition_id === undefined ? null : this.createFormModel.composition_id,
-      specimen_id: this.createFormModel.specimen_id === undefined ? null : this.createFormModel.specimen_id,
+      composition_id: this.createFormModel.composition_id,
+      specimen_id: this.createFormModel.specimen_id,
+      loinc_code: this.createFormModel.loinc_code === '' ? null : this.createFormModel.loinc_code
     };
     this.labTestService.createLabTest(payload).subscribe(() => {
       this.loadLabTests();
@@ -149,12 +148,10 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
   openUpdateModal(labTest: LabTest): void {
     this.updateFormModel = {
       id: labTest.id,
-      name: labTest.name || '', // Default to empty string if null/undefined for form binding
-      description: labTest.description || '',
       loinc_code: labTest.loinc_code || '',
-      // Convert null from backend to undefined for <select> if needed, or handle in template
-      composition_id: labTest.composition_id === null ? undefined : labTest.composition_id,
-      specimen_id: labTest.specimen_id === null ? undefined : labTest.specimen_id,
+      composition_id: labTest.composition_id,
+      specimen_id: labTest.specimen_id,
+      version: labTest.version
     };
     if (this.updateModal) this.updateModal.show();
   }
@@ -164,12 +161,17 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
       console.error("Cannot update without an ID.");
       return;
     }
+    
+    // Ensure that composition_id and specimen_id are defined
+    if (this.updateFormModel.composition_id === undefined || this.updateFormModel.specimen_id === undefined) {
+      alert('Composition and Specimen are required fields');
+      return;
+    }
+    
     const payload: LabTestUpdatePayload = {
-      name: this.updateFormModel.name, // Assumes name is part of update, can be empty string
-      description: this.updateFormModel.description === '' ? null : this.updateFormModel.description,
-      loinc_code: this.updateFormModel.loinc_code === '' ? null : this.updateFormModel.loinc_code,
-      composition_id: this.updateFormModel.composition_id === undefined ? null : this.updateFormModel.composition_id,
-      specimen_id: this.updateFormModel.specimen_id === undefined ? null : this.updateFormModel.specimen_id,
+      composition_id: this.updateFormModel.composition_id,
+      specimen_id: this.updateFormModel.specimen_id,
+      loinc_code: this.updateFormModel.loinc_code === '' ? null : this.updateFormModel.loinc_code
     };
     this.labTestService.updateLabTest(this.updateFormModel.id, payload).subscribe(() => {
       this.loadLabTests();

@@ -7,7 +7,7 @@ from app.schemas import CBCPanelCreate, CBCPanelUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/cbc_panels", tags=["cbc_panels"])
+router = APIRouter(prefix="/cbc_panel", tags=["CBC Panel"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=CBCPanelSchema)
+@router.post("/create", response_model=CBCPanelSchema)
 # Create a new CBC panel
 # Operation: CREATE
 # Description: Adds a new CBC panel to the database with versioning.
@@ -30,7 +30,7 @@ def create_cbc_panel(cbc_panel: CBCPanelCreate, db: Session = Depends(get_db)):
     return db_cbc_panel
 
 
-@router.get("/", response_model=list[CBCPanelSchema])
+@router.get("/all", response_model=list[CBCPanelSchema])
 # List all CBC panels
 # Operation: READ (LIST)
 # Description: Retrieves all CBC panels from the database.
@@ -49,7 +49,7 @@ def get_cbc_panel(cbc_panel_id: int, db: Session = Depends(get_db)):
     return cbc_panel
 
 
-@router.put("/{cbc_panel_id}", response_model=CBCPanelSchema)
+@router.put("/update/{cbc_panel_id}", response_model=CBCPanelSchema)
 # Update a specific CBC panel by ID
 # Operation: UPDATE
 # Description: Updates a CBC panel and archives the previous state in the history table.
@@ -84,7 +84,7 @@ def update_cbc_panel(
     return db_cbc_panel
 
 
-@router.delete("/{cbc_panel_id}")
+@router.delete("/delete/{cbc_panel_id}")
 # Delete a specific CBC panel by ID
 # Operation: DELETE
 # Description: Deletes a CBC panel and its associated history records.

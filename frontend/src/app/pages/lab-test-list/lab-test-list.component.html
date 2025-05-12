@@ -16,7 +16,7 @@
     <tbody>
       <tr *ngFor="let test of labTests">
         <td>{{ test.id }}</td>
-        <td>{{ test.loinc_code }}</td>
+        <td>{{ test.loinc_code || 'N/A' }}</td>
         <td>{{ getCompositionDisplay(test.composition_id) }}</td>
         <td>{{ getSpecimenDisplay(test.specimen_id) }}</td>
         <td>{{ test.version }}</td>
@@ -40,32 +40,24 @@
       <div class="modal-body">
         <form (ngSubmit)="onCreateSubmit()">
           <div class="mb-3">
-            <label for="createTestName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="createTestName" [(ngModel)]="createFormModel.name" name="name" required>
-          </div>
-          <div class="mb-3">
-            <label for="createTestDescription" class="form-label">Description</label>
-            <input type="text" class="form-control" id="createTestDescription" [(ngModel)]="createFormModel.description" name="description">
-          </div>
-          <div class="mb-3">
-            <label for="createTestLoincCode" class="form-label">LOINC Code</label>
-            <input type="text" class="form-control" id="createTestLoincCode" [(ngModel)]="createFormModel.loinc_code" name="loinc_code">
-          </div>
-          <div class="mb-3">
-            <label for="createTestCompositionId" class="form-label">Composition</label>
-            <select class="form-control" id="createTestCompositionId" [(ngModel)]="createFormModel.composition_id" name="composition_id">
-              <option [ngValue]="undefined">Select Composition (Optional)</option>
+            <label for="createTestCompositionId" class="form-label">Composition <span class="text-danger">*</span></label>
+            <select class="form-control" id="createTestCompositionId" [(ngModel)]="createFormModel.composition_id" name="composition_id" required>
+              <option [ngValue]="undefined" disabled selected>Select Composition</option>
               <option *ngFor="let comp of compositions" [value]="comp.id">{{ getCompositionDisplay(comp.id) }}</option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="createTestSpecimenId" class="form-label">Specimen</label>
-            <select class="form-control" id="createTestSpecimenId" [(ngModel)]="createFormModel.specimen_id" name="specimen_id">
-              <option [ngValue]="undefined">Select Specimen (Optional)</option>
+            <label for="createTestSpecimenId" class="form-label">Specimen <span class="text-danger">*</span></label>
+            <select class="form-control" id="createTestSpecimenId" [(ngModel)]="createFormModel.specimen_id" name="specimen_id" required>
+              <option [ngValue]="undefined" disabled selected>Select Specimen</option>
               <option *ngFor="let spec of specimens" [value]="spec.id">{{ getSpecimenDisplay(spec.id) }}</option>
             </select>
           </div>
-          <!-- Version is typically handled by the backend or not directly set by user on create -->
+          <div class="mb-3">
+            <label for="createTestLoincCode" class="form-label">LOINC Code</label>
+            <input type="text" class="form-control" id="createTestLoincCode" [(ngModel)]="createFormModel.loinc_code" name="loinc_code">
+            <small class="text-muted">Optional</small>
+          </div>
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
       </div>
@@ -85,32 +77,22 @@
         <form (ngSubmit)="onUpdateSubmit()">
           <input type="hidden" [(ngModel)]="updateFormModel.id" name="id_update">
           <div class="mb-3">
-            <label for="updateTestName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="updateTestName" [(ngModel)]="updateFormModel.name" name="name_update" required>
-          </div>
-          <div class="mb-3">
-            <label for="updateTestDescription" class="form-label">Description</label>
-            <input type="text" class="form-control" id="updateTestDescription" [(ngModel)]="updateFormModel.description" name="description_update">
-          </div>
-          <div class="mb-3">
-            <label for="updateTestLoincCode" class="form-label">LOINC Code</label>
-            <input type="text" class="form-control" id="updateTestLoincCode" [(ngModel)]="updateFormModel.loinc_code" name="loinc_code_update">
-          </div>
-          <div class="mb-3">
-            <label for="updateTestCompositionId" class="form-label">Composition</label>
-            <select class="form-control" id="updateTestCompositionId" [(ngModel)]="updateFormModel.composition_id" name="composition_id_update">
-              <option [ngValue]="undefined">Select Composition (Optional)</option>
+            <label for="updateTestCompositionId" class="form-label">Composition <span class="text-danger">*</span></label>
+            <select class="form-control" id="updateTestCompositionId" [(ngModel)]="updateFormModel.composition_id" name="composition_id_update" required>
               <option *ngFor="let comp of compositions" [value]="comp.id">{{ getCompositionDisplay(comp.id) }}</option>
             </select>
           </div>
           <div class="mb-3">
-            <label for="updateTestSpecimenId" class="form-label">Specimen</label>
-            <select class="form-control" id="updateTestSpecimenId" [(ngModel)]="updateFormModel.specimen_id" name="specimen_id_update">
-              <option [ngValue]="undefined">Select Specimen (Optional)</option>
+            <label for="updateTestSpecimenId" class="form-label">Specimen <span class="text-danger">*</span></label>
+            <select class="form-control" id="updateTestSpecimenId" [(ngModel)]="updateFormModel.specimen_id" name="specimen_id_update" required>
               <option *ngFor="let spec of specimens" [value]="spec.id">{{ getSpecimenDisplay(spec.id) }}</option>
             </select>
           </div>
-          <!-- Version is typically handled by the backend -->
+          <div class="mb-3">
+            <label for="updateTestLoincCode" class="form-label">LOINC Code</label>
+            <input type="text" class="form-control" id="updateTestLoincCode" [(ngModel)]="updateFormModel.loinc_code" name="loinc_code_update">
+            <small class="text-muted">Optional</small>
+          </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
       </div>
@@ -118,16 +100,16 @@
   </div>
 </div>
 
-<!-- Delete LabTest Modal -->
+<!-- Delete Confirmation Modal -->
 <div class="modal fade" id="deleteLabTestModal" tabindex="-1" aria-labelledby="deleteLabTestModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="deleteLabTestModalLabel">Confirm Delete</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <p>Are you sure you want to delete lab test "{{ testToDelete?.name }}" (ID: {{ testToDelete?.id }})?</p>
+        <p>Are you sure you want to delete Lab Test with ID {{ testToDelete?.id }}?</p>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>

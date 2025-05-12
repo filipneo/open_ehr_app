@@ -7,7 +7,7 @@ from app.schemas import BloodTypePanelCreate, BloodTypePanelUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/blood_type_panel", tags=["blood_type_panel"])
+router = APIRouter(prefix="/blood_type_panel", tags=["Blood Type Panel"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=BloodTypePanelSchema)
+@router.post("/create", response_model=BloodTypePanelSchema)
 # Create a new blood type panel
 # Operation: CREATE
 # Description: Adds a new blood type panel to the database with versioning.
@@ -51,7 +51,7 @@ def get_blood_type_panel(blood_type_panel_id: int, db: Session = Depends(get_db)
     return blood_type_panel
 
 
-@router.put("/{blood_type_panel_id}", response_model=BloodTypePanelSchema)
+@router.put("/update/{blood_type_panel_id}", response_model=BloodTypePanelSchema)
 # Update a specific blood type panel by ID
 # Operation: UPDATE
 # Description: Updates a blood type panel and archives the previous state in the history table.
@@ -87,7 +87,7 @@ def update_blood_type_panel(
     return db_blood_type_panel
 
 
-@router.delete("/{blood_type_panel_id}")
+@router.delete("/delete/{blood_type_panel_id}")
 # Delete a specific blood type panel by ID
 # Operation: DELETE
 # Description: Deletes a blood type panel and its associated history records.

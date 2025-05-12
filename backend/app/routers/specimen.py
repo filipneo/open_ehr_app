@@ -7,7 +7,7 @@ from app.schemas import SpecimenCreate, SpecimenUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/specimens", tags=["specimens"])
+router = APIRouter(prefix="/specimen", tags=["Specimen"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=SpecimenSchema)
+@router.post("/create", response_model=SpecimenSchema)
 # Create a new specimen
 # Operation: CREATE
 # Description: Adds a new specimen to the database with versioning.
@@ -30,7 +30,7 @@ def create_specimen(specimen: SpecimenCreate, db: Session = Depends(get_db)):
     return db_specimen
 
 
-@router.get("/", response_model=list[SpecimenSchema])
+@router.get("/all", response_model=list[SpecimenSchema])
 # List all specimens
 # Operation: READ (LIST)
 # Description: Retrieves all specimens from the database.
@@ -49,7 +49,7 @@ def get_specimen(specimen_id: int, db: Session = Depends(get_db)):
     return specimen
 
 
-@router.put("/{specimen_id}", response_model=SpecimenSchema)
+@router.put("/update/{specimen_id}", response_model=SpecimenSchema)
 # Update a specific specimen by ID
 # Operation: UPDATE
 # Description: Updates a specimen and archives the previous state in the history table.
@@ -84,7 +84,7 @@ def update_specimen(
     return db_specimen
 
 
-@router.delete("/{specimen_id}")
+@router.delete("/delete/{specimen_id}")
 # Delete a specific specimen by ID
 # Operation: DELETE
 # Description: Deletes a specimen and its associated history records.

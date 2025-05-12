@@ -7,7 +7,7 @@ from app.schemas import LabAnalyteResultCreate, LabAnalyteResultUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/lab_analyte", tags=["lab_analyte"])
+router = APIRouter(prefix="/lab_analyte", tags=["Lab Analyte Result"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=LabAnalyteResultSchema)
+@router.post("/create", response_model=LabAnalyteResultSchema)
 # Create a new lab analyte result
 # Operation: CREATE
 # Description: Adds a new lab analyte result to the database with versioning.
@@ -51,7 +51,7 @@ def get_lab_analyte_result(lab_analyte_result_id: int, db: Session = Depends(get
     return lab_analyte
 
 
-@router.put("/{lab_analyte_result_id}", response_model=LabAnalyteResultSchema)
+@router.put("/update/{lab_analyte_result_id}", response_model=LabAnalyteResultSchema)
 # Update a specific lab analyte result by ID
 # Operation: UPDATE
 # Description: Updates a lab analyte result and archives the previous state in the history table.
@@ -89,7 +89,7 @@ def update_lab_analyte_result(
     return db_lab_analyte
 
 
-@router.delete("/{lab_analyte_result_id}")
+@router.delete("/delete/{lab_analyte_result_id}")
 # Delete a specific lab analyte result by ID
 # Operation: DELETE
 # Description: Deletes a lab analyte result and its associated history records.

@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { BloodTypePanel, BloodTypePanelService, BloodTypePanelCreatePayload } from '../../services/blood-type-panel.service';
+import { BloodTypePanel, BloodTypePanelService, BloodTypePanelCreatePayload, BloodTypePanelUpdatePayload } from '../../services/blood-type-panel.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -89,10 +89,16 @@ export class BloodTypePanelListComponent implements OnInit, AfterViewInit {
       console.error('Update modal instance is not available. Cannot show modal.');
     }
   }
-
   onUpdateSubmit(): void {
     if (this.panelToUpdate && this.panelToUpdate.id) {
-      this.bloodTypePanelService.updateBloodTypePanel(this.panelToUpdate.id, this.panelToUpdate).subscribe(() => {
+      // Create update payload from the current panel data, omitting id and version
+      const updatePayload: BloodTypePanelUpdatePayload = {
+        lab_test_id: this.panelToUpdate.lab_test_id,
+        abo_id: this.panelToUpdate.abo_id,
+        rh_id: this.panelToUpdate.rh_id
+      };
+      
+      this.bloodTypePanelService.updateBloodTypePanel(this.panelToUpdate.id, updatePayload).subscribe(() => {
         this.loadBloodTypePanels();
         if (this.updateModal) {
           this.updateModal.hide();

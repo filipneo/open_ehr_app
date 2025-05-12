@@ -6,47 +6,44 @@ export interface LabAnalyteResult {
   id: number;
   lab_test_id: number;
   loinc_code: string;
-  value: string;
-  unit?: string | null;
-  reference_low?: string | null;
-  reference_high?: string | null;
-  interpretation?: string | null;
-  reference_range_loinc_code?: string | null; // FK to ReferenceRange
-  version?: number;
+  value: number;
+  unit: string;
+  reference_low: number | null;
+  reference_high: number | null;
+  interpretation: string | null;
+  version: number;
 }
 
 export interface LabAnalyteResultCreatePayload {
   lab_test_id: number;
   loinc_code: string;
-  value: string;
-  unit?: string | null;
-  reference_low?: string | null;
-  reference_high?: string | null;
+  value: number;
+  unit: string;
+  reference_low?: number | null;
+  reference_high?: number | null;
   interpretation?: string | null;
-  reference_range_loinc_code?: string | null;
 }
 
 export interface LabAnalyteResultUpdatePayload {
-  lab_test_id?: number;
-  loinc_code?: string;
-  value?: string;
-  unit?: string | null;
-  reference_low?: string | null;
-  reference_high?: string | null;
+  lab_test_id: number;
+  loinc_code: string;
+  value: number;
+  unit: string;
+  reference_low?: number | null;
+  reference_high?: number | null;
   interpretation?: string | null;
-  reference_range_loinc_code?: string | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class LabAnalyteService {
-  private apiUrl = 'http://localhost:8000/lab_analytes'; // Based on backend router
+  private apiUrl = 'http://localhost:8000/lab_analyte';
 
   constructor(private http: HttpClient) { }
 
   getLabAnalyteResults(): Observable<LabAnalyteResult[]> {
-    return this.http.get<LabAnalyteResult[]>(this.apiUrl);
+    return this.http.get<LabAnalyteResult[]>(`${this.apiUrl}/all`);
   }
 
   getLabAnalyteResult(id: number): Observable<LabAnalyteResult> {
@@ -54,14 +51,14 @@ export class LabAnalyteService {
   }
 
   createLabAnalyteResult(payload: LabAnalyteResultCreatePayload): Observable<LabAnalyteResult> {
-    return this.http.post<LabAnalyteResult>(this.apiUrl, payload);
+    return this.http.post<LabAnalyteResult>(`${this.apiUrl}/create`, payload);
   }
 
   updateLabAnalyteResult(id: number, payload: LabAnalyteResultUpdatePayload): Observable<LabAnalyteResult> {
-    return this.http.put<LabAnalyteResult>(`${this.apiUrl}/${id}`, payload);
+    return this.http.put<LabAnalyteResult>(`${this.apiUrl}/update/${id}`, payload);
   }
 
   deleteLabAnalyteResult(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 }

@@ -18,21 +18,22 @@ declare var bootstrap: any;
 export class BodyMeasurementListComponent implements OnInit, AfterViewInit {
   bodyMeasurements: BodyMeasurement[] = [];
   patients: Patient[] = []; // To store patient list for dropdown
-
   measurementToCreate: BodyMeasurementCreatePayload = {
     patient_id: 0, // Initialize with a default or ensure it's set before use
     record_time: '',
     value: 0,
-    unit: ''
+    unit: '',
+    snomed_code: ''
   };
   // For update, ensure all fields are potentially part of the form.
   // id is crucial for the update operation itself.
-  measurementToUpdate: BodyMeasurementUpdatePayload & { id?: number } = {
+  measurementToUpdate: BodyMeasurementUpdatePayload & { id?: number, version?: number } = {
     id: undefined, // Keep id for context, but it's not part of the payload for update typically
     patient_id: 0,
     record_time: '',
     value: 0,
-    unit: ''
+    unit: '',
+    snomed_code: ''
   };
   measurementToDelete: BodyMeasurement | null = null;
 
@@ -152,12 +153,12 @@ export class BodyMeasurementListComponent implements OnInit, AfterViewInit {
       if (this.createModal) this.createModal.hide();
     });
   }
-
   openUpdateModal(measurement: BodyMeasurement): void {
     // Create a deep copy for the form model
     this.measurementToUpdate = {
       ...measurement, // Spread existing measurement data
-      record_time: this.formatDateTimeForInput(measurement.record_time) // Format for input
+      record_time: this.formatDateTimeForInput(measurement.record_time), // Format for input
+      version: measurement.version // Include version for display purposes
     };
     if (this.updateModal) {
       this.updateModal.show();

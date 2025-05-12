@@ -40,22 +40,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">
-          <div class="mb-3">
-            <label for="createSpecimenType" class="form-label">Specimen Type</label>
+        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+            <label for="createSpecimenType" class="form-label">Specimen Type <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createSpecimenType" [(ngModel)]="specimenToCreate.specimen_type" name="specimen_type" required>
           </div>
           <div class="mb-3">
-            <label for="createCollectionTime" class="form-label">Collection Time</label>
+            <label for="createCollectionTime" class="form-label">Collection Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="createCollectionTime" [(ngModel)]="specimenToCreate.collection_time" name="collection_time" required>
           </div>
           <div class="mb-3">
             <label for="createSnomedCode" class="form-label">SNOMED Code</label>
             <input type="text" class="form-control" id="createSnomedCode" [(ngModel)]="specimenToCreate.snomed_code" name="snomed_code">
+            <small class="text-muted">Optional</small>
           </div>
           <div class="mb-3">
             <label for="createDescription" class="form-label">Description</label>
             <input type="text" class="form-control" id="createDescription" [(ngModel)]="specimenToCreate.description" name="description">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Create</button>
         </form>
@@ -74,26 +75,23 @@
       </div>
       <div class="modal-body">
         <form (ngSubmit)="onUpdateSubmit()">
-          <input type="hidden" [(ngModel)]="specimenToUpdate.id" name="id">
-          <div class="mb-3">
-            <label for="updateSpecimenType" class="form-label">Specimen Type</label>
+          <input type="hidden" [(ngModel)]="specimenToUpdate.id" name="id">          <div class="mb-3">
+            <label for="updateSpecimenType" class="form-label">Specimen Type <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="updateSpecimenType" [(ngModel)]="specimenToUpdate.specimen_type" name="specimen_type_update" required>
           </div>
           <div class="mb-3">
-            <label for="updateCollectionTime" class="form-label">Collection Time</label>
+            <label for="updateCollectionTime" class="form-label">Collection Time <span class="text-danger">*</span></label>
             <input type="datetime-local" class="form-control" id="updateCollectionTime" [(ngModel)]="specimenToUpdate.collection_time" name="collection_time_update" required>
           </div>
           <div class="mb-3">
             <label for="updateSnomedCode" class="form-label">SNOMED Code</label>
             <input type="text" class="form-control" id="updateSnomedCode" [(ngModel)]="specimenToUpdate.snomed_code" name="snomed_code_update">
+            <small class="text-muted">Optional</small>
           </div>
           <div class="mb-3">
             <label for="updateDescription" class="form-label">Description</label>
             <input type="text" class="form-control" id="updateDescription" [(ngModel)]="specimenToUpdate.description" name="description_update">
-          </div>
-          <div class="mb-3">
-            <label for="updateVersion" class="form-label">Version</label>
-            <input type="number" class="form-control" id="updateVersion" [(ngModel)]="specimenToUpdate.version" name="version_update">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

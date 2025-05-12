@@ -6,7 +6,7 @@ export interface Composition {
   id: number;
   patient_id: number;
   start_time: string; // Using string for datetime, will be handled by input type in HTML
-  version?: number;
+  version: number;
 }
 
 export interface CompositionCreatePayload {
@@ -18,23 +18,23 @@ export interface CompositionCreatePayload {
   providedIn: 'root'
 })
 export class CompositionService {
-  private apiUrl = 'http://localhost:8000/compositions'; // Corrected API URL
+  private apiUrl = 'http://localhost:8000/composition';
 
   constructor(private http: HttpClient) { }
 
   getCompositions(): Observable<Composition[]> {
-    return this.http.get<Composition[]>(this.apiUrl);
+    return this.http.get<Composition[]>(`${this.apiUrl}/all`);
   }
 
   createComposition(composition: CompositionCreatePayload): Observable<Composition> {
-    return this.http.post<Composition>(this.apiUrl, composition);
+    return this.http.post<Composition>(`${this.apiUrl}/create`, composition);
   }
 
   updateComposition(id: number, composition: Composition): Observable<Composition> {
-    return this.http.put<Composition>(`${this.apiUrl}/${id}`, composition);
+    return this.http.put<Composition>(`${this.apiUrl}/update/${id}`, composition);
   }
 
   deleteComposition(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 }

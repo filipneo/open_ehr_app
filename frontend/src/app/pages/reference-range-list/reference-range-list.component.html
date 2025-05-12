@@ -37,22 +37,23 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">
-          <div class="mb-3">
-            <label for="createLoincCode" class="form-label">LOINC Code</label>
+        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+            <label for="createLoincCode" class="form-label">LOINC Code <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createLoincCode" [(ngModel)]="rangeToCreate.loinc_code" name="createLoincCode" required>
           </div>
           <div class="mb-3">
             <label for="createLow" class="form-label">Low</label>
-            <input type="number" class="form-control" id="createLow" [(ngModel)]="rangeToCreate.low" name="createLow">
+            <input type="number" step="0.01" class="form-control" id="createLow" [(ngModel)]="rangeToCreate.low" name="createLow">
+            <small class="text-muted">Optional</small>
           </div>
           <div class="mb-3">
             <label for="createHigh" class="form-label">High</label>
-            <input type="number" class="form-control" id="createHigh" [(ngModel)]="rangeToCreate.high" name="createHigh">
-          </div>
+            <input type="number" step="0.01" class="form-control" id="createHigh" [(ngModel)]="rangeToCreate.high" name="createHigh">
+            <small class="text-muted">Optional</small>          </div>
           <div class="mb-3">
             <label for="createUnit" class="form-label">Unit</label>
             <input type="text" class="form-control" id="createUnit" [(ngModel)]="rangeToCreate.unit" name="createUnit">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Create Range</button>
         </form>
@@ -74,18 +75,20 @@
           <div class="mb-3">
             <label for="updateLoincCode" class="form-label">LOINC Code (Read-only)</label>
             <input type="text" class="form-control" id="updateLoincCode" [(ngModel)]="rangeToUpdate.loinc_code" name="updateLoincCode" readonly>
-          </div>
-          <div class="mb-3">
+          </div>          <div class="mb-3">
             <label for="updateLow" class="form-label">Low</label>
-            <input type="number" class="form-control" id="updateLow" [(ngModel)]="rangeToUpdate.low" name="updateLow">
+            <input type="number" step="0.01" class="form-control" id="updateLow" [(ngModel)]="rangeToUpdate.low" name="updateLow">
+            <small class="text-muted">Optional</small>
           </div>
           <div class="mb-3">
             <label for="updateHigh" class="form-label">High</label>
-            <input type="number" class="form-control" id="updateHigh" [(ngModel)]="rangeToUpdate.high" name="updateHigh">
+            <input type="number" step="0.01" class="form-control" id="updateHigh" [(ngModel)]="rangeToUpdate.high" name="updateHigh">
+            <small class="text-muted">Optional</small>
           </div>
           <div class="mb-3">
             <label for="updateUnit" class="form-label">Unit</label>
             <input type="text" class="form-control" id="updateUnit" [(ngModel)]="rangeToUpdate.unit" name="updateUnit">
+            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>

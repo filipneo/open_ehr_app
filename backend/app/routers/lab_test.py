@@ -7,7 +7,7 @@ from app.schemas import LabTestCreate, LabTestUpdate
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/lab_tests", tags=["laboratory_tests"])
+router = APIRouter(prefix="/lab_test", tags=["Laboratory Test"])
 
 
 def get_db():
@@ -18,7 +18,7 @@ def get_db():
         db.close()
 
 
-@router.post("/", response_model=LabTestSchema)
+@router.post("/create", response_model=LabTestSchema)
 # Create a new lab test
 # Operation: CREATE
 # Description: Adds a new lab test to the database with versioning.
@@ -30,7 +30,7 @@ def create_lab_test(lab_test: LabTestCreate, db: Session = Depends(get_db)):
     return db_lab_test
 
 
-@router.get("/", response_model=list[LabTestSchema])
+@router.get("/all", response_model=list[LabTestSchema])
 # List all lab tests
 # Operation: READ (LIST)
 # Description: Retrieves all lab tests from the database.
@@ -49,7 +49,7 @@ def get_lab_test(lab_test_id: int, db: Session = Depends(get_db)):
     return lab_test
 
 
-@router.put("/{lab_test_id}", response_model=LabTestSchema)
+@router.put("/update/{lab_test_id}", response_model=LabTestSchema)
 # Update a specific lab test by ID
 # Operation: UPDATE
 # Description: Updates a lab test and archives the previous state in the history table.
@@ -83,7 +83,7 @@ def update_lab_test(
     return db_lab_test
 
 
-@router.delete("/{lab_test_id}")
+@router.delete("/delete/{lab_test_id}")
 # Delete a specific lab test by ID
 # Operation: DELETE
 # Description: Deletes a lab test and its associated history records.

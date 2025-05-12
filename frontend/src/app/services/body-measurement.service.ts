@@ -8,8 +8,8 @@ export interface BodyMeasurement {
   record_time: string; // ISO string format
   value: number;
   unit: string;
-  snomed_code?: string;
-  version?: number;
+  snomed_code: string;
+  version: number;
 }
 
 export interface BodyMeasurementCreatePayload {
@@ -17,7 +17,7 @@ export interface BodyMeasurementCreatePayload {
   record_time: string; // ISO string format
   value: number;
   unit: string;
-  snomed_code?: string;
+  snomed_code: string;
 }
 
 export interface BodyMeasurementUpdatePayload {
@@ -32,12 +32,12 @@ export interface BodyMeasurementUpdatePayload {
   providedIn: 'root'
 })
 export class BodyMeasurementService {
-  private apiUrl = 'http://localhost:8000/body_measurements'; 
+  private apiUrl = 'http://localhost:8000/body_measurement'; 
 
   constructor(private http: HttpClient) { }
 
   getBodyMeasurements(): Observable<BodyMeasurement[]> {
-    return this.http.get<BodyMeasurement[]>(this.apiUrl);
+    return this.http.get<BodyMeasurement[]>(`${this.apiUrl}/all`);
   }
 
   getBodyMeasurement(id: number): Observable<BodyMeasurement> {
@@ -45,14 +45,14 @@ export class BodyMeasurementService {
   }
 
   createBodyMeasurement(payload: BodyMeasurementCreatePayload): Observable<BodyMeasurement> {
-    return this.http.post<BodyMeasurement>(this.apiUrl, payload);
+    return this.http.post<BodyMeasurement>(`${this.apiUrl}/create`, payload);
   }
 
   updateBodyMeasurement(id: number, payload: BodyMeasurementUpdatePayload): Observable<BodyMeasurement> {
-    return this.http.put<BodyMeasurement>(`${this.apiUrl}/${id}`, payload);
+    return this.http.put<BodyMeasurement>(`${this.apiUrl}/update/${id}`, payload);
   }
 
   deleteBodyMeasurement(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 }

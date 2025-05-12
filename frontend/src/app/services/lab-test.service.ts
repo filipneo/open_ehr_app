@@ -4,40 +4,34 @@ import { Observable } from 'rxjs';
 
 export interface LabTest {
   id: number;
-  name: string;
-  description?: string;
-  loinc_code?: string;
-  composition_id?: number; // Foreign Key to Composition
-  specimen_id?: number;    // Foreign Key to Specimen
-  version?: number;
+  composition_id: number;
+  specimen_id: number;
+  loinc_code: string | null;
+  version: number;
 }
 
 export interface LabTestCreatePayload {
-  name: string;
-  description?: string | null; // Allow null
-  loinc_code?: string | null;  // Allow null
-  composition_id?: number | null; // Allow null
-  specimen_id?: number | null;    // Allow null
+  composition_id: number;
+  specimen_id: number;
+  loinc_code?: string | null;
 }
 
 export interface LabTestUpdatePayload {
-  name?: string;
-  description?: string | null; // Allow null
-  loinc_code?: string | null;  // Allow null
-  composition_id?: number | null; // Allow null
-  specimen_id?: number | null;    // Allow null
+  composition_id: number;
+  specimen_id: number;
+  loinc_code?: string | null;
 }
 
 @Injectable({
   providedIn: 'root'
 })
 export class LabTestService {
-  private apiUrl = 'http://localhost:8000/lab_tests';
+  private apiUrl = 'http://localhost:8000/lab_test';
 
   constructor(private http: HttpClient) { }
 
   getLabTests(): Observable<LabTest[]> {
-    return this.http.get<LabTest[]>(this.apiUrl);
+    return this.http.get<LabTest[]>(`${this.apiUrl}/all`);
   }
 
   getLabTest(id: number): Observable<LabTest> {
@@ -45,14 +39,14 @@ export class LabTestService {
   }
 
   createLabTest(payload: LabTestCreatePayload): Observable<LabTest> {
-    return this.http.post<LabTest>(this.apiUrl, payload);
+    return this.http.post<LabTest>(`${this.apiUrl}/create`, payload);
   }
 
   updateLabTest(id: number, payload: LabTestUpdatePayload): Observable<LabTest> {
-    return this.http.put<LabTest>(`${this.apiUrl}/${id}`, payload);
+    return this.http.put<LabTest>(`${this.apiUrl}/update/${id}`, payload);
   }
 
   deleteLabTest(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/${id}`);
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
   }
 }

@@ -18,19 +18,18 @@ export class CbcPanelListComponent implements OnInit, AfterViewInit {
   cbcPanels: CbcPanel[] = [];
   labTests: LabTest[] = [];
   labAnalyteResults: LabAnalyteResult[] = []; // For Hemoglobin, White Cell, Platelet dropdowns
-
   createFormModel: CbcPanelCreatePayload = {
     lab_test_id: 0,
-    hemoglobin_id: 0,
-    white_cell_id: 0,
-    platelet_id: 0
-  };
-  updateFormModel: CbcPanelUpdatePayload & { id?: number } = {
+    hemoglobin_id: null,
+    white_cell_id: null,
+    platelet_id: null
+  };updateFormModel: CbcPanelUpdatePayload & { id?: number, version?: number } = {
     id: undefined,
     lab_test_id: 0,
-    hemoglobin_id: 0,
-    white_cell_id: 0,
-    platelet_id: 0
+    hemoglobin_id: null,
+    white_cell_id: null,
+    platelet_id: null,
+    version: undefined
   };
   panelToDelete: CbcPanel | null = null;
 
@@ -97,23 +96,21 @@ export class CbcPanelListComponent implements OnInit, AfterViewInit {
       }
     });
   }
-
   getLabTestName(labTestId: number): string {
     const labTest = this.labTests.find(lt => lt.id === labTestId);
-    return labTest ? labTest.name : 'Unknown Lab Test';
+    return labTest ? `Lab Test ID: ${labTest.id}` : 'Unknown Lab Test';
   }
 
   getLabAnalyteDisplay(analyteId: number): string {
     const analyte = this.labAnalyteResults.find(lar => lar.id === analyteId);
     return analyte ? `ID: ${analyte.id} (${analyte.loinc_code} - ${analyte.value} ${analyte.unit || ''})` : 'Unknown Analyte';
   }
-
   openCreateModal(): void {
     this.createFormModel = {
       lab_test_id: this.labTests.length > 0 ? this.labTests[0].id : 0,
-      hemoglobin_id: this.labAnalyteResults.length > 0 ? this.labAnalyteResults[0].id : 0, 
-      white_cell_id: this.labAnalyteResults.length > 0 ? this.labAnalyteResults[0].id : 0, 
-      platelet_id: this.labAnalyteResults.length > 0 ? this.labAnalyteResults[0].id : 0,
+      hemoglobin_id: null,
+      white_cell_id: null, 
+      platelet_id: null,
     };
     if (this.createModal) this.createModal.show();
   }
@@ -124,7 +121,6 @@ export class CbcPanelListComponent implements OnInit, AfterViewInit {
       if (this.createModal) this.createModal.hide();
     });
   }
-
   openUpdateModal(panel: CbcPanel): void {
     this.updateFormModel = {
       id: panel.id,
@@ -132,6 +128,7 @@ export class CbcPanelListComponent implements OnInit, AfterViewInit {
       hemoglobin_id: panel.hemoglobin_id,
       white_cell_id: panel.white_cell_id,
       platelet_id: panel.platelet_id,
+      version: panel.version
     };
     if (this.updateModal) this.updateModal.show();
   }
