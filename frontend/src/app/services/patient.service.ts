@@ -18,6 +18,78 @@ export interface PatientCreatePayload {
   identifier?: string | null;
 }
 
+export interface PatientFull {
+  id: number;
+  first_name: string;
+  last_name: string;
+  sex: 'male' | 'female';
+  identifier: string | null;
+  version: number;
+  compositions: Composition[];
+  body_measurements: BodyMeasurement[];
+}
+
+export interface Composition {
+  id: number;
+  start_time: string;
+  version: number;
+  lab_tests: LabTest[];
+}
+
+export interface LabTest {
+  id: number;
+  loinc_code: string;
+  version: number;
+  specimen: Specimen | null;
+  analytes: LabAnalyte[];
+  cbc_panel: CBCPanel | null;
+  blood_type_panel: BloodTypePanel | null;
+}
+
+export interface Specimen {
+  id: number;
+  type: string;
+  collection_time: string;
+  snomed_code: string;
+  description: string;
+  version: number;
+}
+
+export interface LabAnalyte {
+  id: number;
+  loinc_code: string;
+  value: number;
+  unit: string;
+  reference_low: number | null;
+  reference_high: number | null;
+  interpretation: string | null;
+  version: number;
+}
+
+export interface CBCPanel {
+  id: number;
+  hemoglobin_id: number;
+  white_cell_id: number;
+  platelet_id: number;
+  version: number;
+}
+
+export interface BloodTypePanel {
+  id: number;
+  abo_id: number;
+  rh_id: number;
+  version: number;
+}
+
+export interface BodyMeasurement {
+  id: number;
+  record_time: string;
+  value: number;
+  unit: string;
+  snomed_code: string;
+  version: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -28,6 +100,10 @@ export class PatientService {
 
   getPatients(): Observable<Patient[]> {
     return this.http.get<Patient[]>(`${this.apiUrl}/all`);
+  }
+
+  getPatientFull(id: number): Observable<PatientFull> {
+    return this.http.get<PatientFull>(`${this.apiUrl}/${id}/full`);
   }
 
   createPatient(patient: PatientCreatePayload): Observable<Patient> {

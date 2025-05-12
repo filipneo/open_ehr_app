@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Patient, PatientService, PatientCreatePayload } from '../../services/patient.service';
+import { Patient, PatientService, PatientCreatePayload, PatientFull } from '../../services/patient.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -16,17 +16,18 @@ export class PatientListComponent implements OnInit, AfterViewInit {
   patientToUpdate: Patient = {} as Patient;
   patientToCreate: PatientCreatePayload = {} as PatientCreatePayload;
   patientToDelete: Patient | null = null;
+  patientFullDetails: PatientFull | null = null;
 
   private updateModal: any; // This will hold the Bootstrap Modal instance
   private deleteModal: any; // This will hold the Bootstrap Modal instance
   private createModal: any; // This will hold the Bootstrap Modal instance
+  private detailsModal: any; // This will hold the Bootstrap Modal instance for patient details
 
   constructor(private patientService: PatientService) { }
 
   ngOnInit(): void {
     this.loadPatients();
   }
-
   ngAfterViewInit(): void {
     const bootstrap = (window as any).bootstrap;
     if (bootstrap && typeof bootstrap.Modal === 'function') {
@@ -49,6 +50,13 @@ export class PatientListComponent implements OnInit, AfterViewInit {
         this.createModal = new bootstrap.Modal(createModalEl);
       } else {
         console.error('Create patient modal element (createPatientModal) not found.');
+      }
+      
+      const detailsModalEl = document.getElementById('patientDetailsModal');
+      if (detailsModalEl) {
+        this.detailsModal = new bootstrap.Modal(detailsModalEl);
+      } else {
+        console.error('Patient details modal element (patientDetailsModal) not found.');
       }
     } else {
       console.error('Bootstrap JavaScript or Bootstrap.Modal is not loaded or not available on the window object.');
@@ -122,11 +130,34 @@ export class PatientListComponent implements OnInit, AfterViewInit {
       });
     }
   }
-
   cancelDelete(): void {
     if (this.deleteModal) {
       this.deleteModal.hide();
     }
     this.patientToDelete = null;
+  }
+
+  openDetailsModal(patient: Patient): void {
+    this.patientFullDetails = null; // Reset previous data
+    this.patientService.getPatientFull(patient.id).subscribe(
+      (data) => {
+        this.patientFullDetails = data;
+        if (this.detailsModal) {
+          this.detailsModal.show();
+        } else {
+          console.error('Details modal instance is not available. Cannot show modal.');
+        }
+      },
+      (error) => {
+        console.error('Error fetching patient details:', error);
+      }
+    );
+  }
+
+  closeDetailsModal(): void {
+    if (this.detailsModal) {
+      this.detailsModal.hide();
+    }
+    this.patientFullDetails = null;
   }
 }
