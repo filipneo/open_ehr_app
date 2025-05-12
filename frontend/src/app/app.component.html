@@ -7,10 +7,34 @@
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
           <li class="nav-item">
-            <a class="nav-link" routerLink="/">Home</a>
+            <a class="nav-link" routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="/patients">Patients</a>
+            <a class="nav-link" routerLink="/patients" routerLinkActive="active">Patients</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/body-measurements" routerLinkActive="active">Body Measurements</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/compositions" routerLinkActive="active">Compositions</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/specimens" routerLinkActive="active">Specimens</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/lab-tests" routerLinkActive="active">Lab Tests</a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/cbc-panels" routerLinkActive="active">CBC Panels</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/blood-type-panels" routerLinkActive="active">Blood Type Panels</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/lab-analytes" routerLinkActive="active">Lab Analytes</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/reference-ranges" routerLinkActive="active">Reference Ranges</a>
           </li>
         </ul>
       </div>

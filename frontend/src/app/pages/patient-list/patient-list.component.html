@@ -1,5 +1,6 @@
 <div class="container mt-4">
   <h2>Patient List</h2>
+  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Patient</button>
   <table class="table table-striped">
     <thead>
       <tr>
@@ -27,6 +28,43 @@
   </table>
 </div>
 
+<!-- Create Patient Modal -->
+<div class="modal fade" id="createPatientModal" tabindex="-1" aria-labelledby="createPatientModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createPatientModalLabel">Create Patient</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createFirstName" class="form-label">First Name</label>
+            <input type="text" class="form-control" id="createFirstName" [(ngModel)]="patientToCreate.first_name" name="createFirstName" required>
+          </div>
+          <div class="mb-3">
+            <label for="createLastName" class="form-label">Last Name</label>
+            <input type="text" class="form-control" id="createLastName" [(ngModel)]="patientToCreate.last_name" name="createLastName" required>
+          </div>
+          <div class="mb-3">
+            <label for="createSex" class="form-label">Sex</label>
+            <select class="form-control" id="createSex" [(ngModel)]="patientToCreate.sex" name="createSex" required>
+              <option value="" disabled selected>Select Sex</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createIdentifier" class="form-label">Identifier</label>
+            <input type="text" class="form-control" id="createIdentifier" [(ngModel)]="patientToCreate.identifier" name="createIdentifier">
+          </div>
+          <button type="submit" class="btn btn-primary">Create Patient</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Update Patient Modal -->
 <div class="modal fade" id="updatePatientModal" tabindex="-1" aria-labelledby="updatePatientModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -39,15 +77,19 @@
         <form *ngIf="patientToUpdate" (ngSubmit)="onUpdateSubmit()">
           <div class="mb-3">
             <label for="firstName" class="form-label">First Name</label>
-            <input type="text" class="form-control" id="firstName" [(ngModel)]="patientToUpdate.first_name" name="firstName">
+            <input type="text" class="form-control" id="firstName" [(ngModel)]="patientToUpdate.first_name" name="firstName" required>
           </div>
           <div class="mb-3">
             <label for="lastName" class="form-label">Last Name</label>
-            <input type="text" class="form-control" id="lastName" [(ngModel)]="patientToUpdate.last_name" name="lastName">
+            <input type="text" class="form-control" id="lastName" [(ngModel)]="patientToUpdate.last_name" name="lastName" required>
           </div>
           <div class="mb-3">
             <label for="sex" class="form-label">Sex</label>
-            <input type="text" class="form-control" id="sex" [(ngModel)]="patientToUpdate.sex" name="sex">
+            <select class="form-control" id="sex" [(ngModel)]="patientToUpdate.sex" name="sex" required>
+              <option value="" disabled selected>Select Sex</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
           </div>
           <div class="mb-3">
             <label for="identifier" class="form-label">Identifier</label>

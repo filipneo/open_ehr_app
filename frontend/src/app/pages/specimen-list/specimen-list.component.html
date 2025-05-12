@@ -1,0 +1,122 @@
+<div class="container mt-4">
+  <h2>Specimen List</h2>
+  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New Specimen</button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Specimen Type</th>
+        <th>Collection Time</th>
+        <th>SNOMED Code</th>
+        <th>Description</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let specimen of specimens">
+        <td>{{ specimen.id }}</td>
+        <td>{{ specimen.specimen_type }}</td>
+        <td>{{ specimen.collection_time | date:'medium' }}</td>
+        <td>{{ specimen.snomed_code }}</td>
+        <td>{{ specimen.description }}</td>
+        <td>{{ specimen.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(specimen)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(specimen)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create Specimen Modal -->
+<div class="modal fade" id="createSpecimenModal" tabindex="-1" aria-labelledby="createSpecimenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createSpecimenModalLabel">Create Specimen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createSpecimenType" class="form-label">Specimen Type</label>
+            <input type="text" class="form-control" id="createSpecimenType" [(ngModel)]="specimenToCreate.specimen_type" name="specimen_type" required>
+          </div>
+          <div class="mb-3">
+            <label for="createCollectionTime" class="form-label">Collection Time</label>
+            <input type="datetime-local" class="form-control" id="createCollectionTime" [(ngModel)]="specimenToCreate.collection_time" name="collection_time" required>
+          </div>
+          <div class="mb-3">
+            <label for="createSnomedCode" class="form-label">SNOMED Code</label>
+            <input type="text" class="form-control" id="createSnomedCode" [(ngModel)]="specimenToCreate.snomed_code" name="snomed_code">
+          </div>
+          <div class="mb-3">
+            <label for="createDescription" class="form-label">Description</label>
+            <input type="text" class="form-control" id="createDescription" [(ngModel)]="specimenToCreate.description" name="description">
+          </div>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Specimen Modal -->
+<div class="modal fade" id="updateSpecimenModal" tabindex="-1" aria-labelledby="updateSpecimenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateSpecimenModalLabel">Update Specimen</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onUpdateSubmit()">
+          <input type="hidden" [(ngModel)]="specimenToUpdate.id" name="id">
+          <div class="mb-3">
+            <label for="updateSpecimenType" class="form-label">Specimen Type</label>
+            <input type="text" class="form-control" id="updateSpecimenType" [(ngModel)]="specimenToUpdate.specimen_type" name="specimen_type_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateCollectionTime" class="form-label">Collection Time</label>
+            <input type="datetime-local" class="form-control" id="updateCollectionTime" [(ngModel)]="specimenToUpdate.collection_time" name="collection_time_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateSnomedCode" class="form-label">SNOMED Code</label>
+            <input type="text" class="form-control" id="updateSnomedCode" [(ngModel)]="specimenToUpdate.snomed_code" name="snomed_code_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateDescription" class="form-label">Description</label>
+            <input type="text" class="form-control" id="updateDescription" [(ngModel)]="specimenToUpdate.description" name="description_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateVersion" class="form-label">Version</label>
+            <input type="number" class="form-control" id="updateVersion" [(ngModel)]="specimenToUpdate.version" name="version_update">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Specimen Modal -->
+<div class="modal fade" id="deleteSpecimenModal" tabindex="-1" aria-labelledby="deleteSpecimenModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteSpecimenModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete specimen with ID: {{ specimenToDelete?.id }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

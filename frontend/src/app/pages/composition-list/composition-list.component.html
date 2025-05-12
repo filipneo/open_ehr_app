@@ -1,0 +1,108 @@
+<div class="container mt-4">
+  <h2>Composition List</h2>
+  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Composition</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient</th> <!-- Changed from Patient ID -->
+        <th>Start Time</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let composition of compositions">
+        <td>{{ composition.id }}</td>
+        <td>{{ getPatientName(composition.patient_id) }}</td> <!-- Use getPatientName method -->
+        <td>{{ composition.start_time | date:'medium' }}</td> <!-- Formatting date for display -->
+        <td>{{ composition.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(composition)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(composition)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create Composition Modal -->
+<div class="modal fade" id="createCompositionModal" tabindex="-1" aria-labelledby="createCompositionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createCompositionModalLabel">Create Composition</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createPatientId" class="form-label">Patient</label>
+            <select class="form-control" id="createPatientId" [(ngModel)]="compositionToCreate.patient_id" name="createPatientId" required>
+              <option *ngFor="let patient of patients" [value]="patient.id">
+                {{ patient.first_name }} {{ patient.last_name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createStartTime" class="form-label">Start Time</label>
+            <input type="datetime-local" class="form-control" id="createStartTime" [(ngModel)]="compositionToCreate.start_time" name="createStartTime" required>
+          </div>
+          <button type="submit" class="btn btn-primary">Create Composition</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update Composition Modal -->
+<div class="modal fade" id="updateCompositionModal" tabindex="-1" aria-labelledby="updateCompositionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateCompositionModalLabel">Update Composition</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="compositionToUpdate" (ngSubmit)="onUpdateSubmit()">
+          <div class="mb-3">
+            <label for="updatePatientId" class="form-label">Patient</label>
+            <select class="form-control" id="updatePatientId" [(ngModel)]="compositionToUpdate.patient_id" name="updatePatientId" required>
+              <option *ngFor="let patient of patients" [value]="patient.id">
+                {{ patient.first_name }} {{ patient.last_name }}
+              </option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updateStartTime" class="form-label">Start Time</label>
+            <input type="datetime-local" class="form-control" id="updateStartTime" [(ngModel)]="compositionToUpdate.start_time" name="updateStartTime" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateVersion" class="form-label">Version</label>
+            <input type="number" class="form-control" id="updateVersion" [(ngModel)]="compositionToUpdate.version" name="updateVersion">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteCompositionModal" tabindex="-1" aria-labelledby="deleteCompositionModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCompositionModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete Composition with ID {{ compositionToDelete?.id }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

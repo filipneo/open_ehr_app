@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Patient, PatientService } from '../../services/patient.service';
+import { Patient, PatientService, PatientCreatePayload } from '../../services/patient.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
@@ -14,10 +14,12 @@ export class PatientListComponent implements OnInit, AfterViewInit {
   patients: Patient[] = [];
   selectedPatient: Patient | null = null;
   patientToUpdate: Patient = {} as Patient;
+  patientToCreate: PatientCreatePayload = {} as PatientCreatePayload;
   patientToDelete: Patient | null = null;
 
   private updateModal: any; // This will hold the Bootstrap Modal instance
   private deleteModal: any; // This will hold the Bootstrap Modal instance
+  private createModal: any; // This will hold the Bootstrap Modal instance
 
   constructor(private patientService: PatientService) { }
 
@@ -41,6 +43,13 @@ export class PatientListComponent implements OnInit, AfterViewInit {
       } else {
         console.error('Delete patient modal element (deletePatientModal) not found.');
       }
+
+      const createModalEl = document.getElementById('createPatientModal');
+      if (createModalEl) {
+        this.createModal = new bootstrap.Modal(createModalEl);
+      } else {
+        console.error('Create patient modal element (createPatientModal) not found.');
+      }
     } else {
       console.error('Bootstrap JavaScript or Bootstrap.Modal is not loaded or not available on the window object.');
       if (bootstrap) {
@@ -52,6 +61,24 @@ export class PatientListComponent implements OnInit, AfterViewInit {
   loadPatients(): void {
     this.patientService.getPatients().subscribe(data => {
       this.patients = data;
+    });
+  }
+
+  openCreateModal(): void {
+    this.patientToCreate = {} as PatientCreatePayload; // Reset the form
+    if (this.createModal) {
+      this.createModal.show();
+    } else {
+      console.error('Create modal instance is not available. Cannot show modal.');
+    }
+  }
+
+  onCreateSubmit(): void {
+    this.patientService.createPatient(this.patientToCreate).subscribe(() => {
+      this.loadPatients();
+      if (this.createModal) {
+        this.createModal.hide();
+      }
     });
   }
 

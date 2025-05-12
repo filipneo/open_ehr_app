@@ -1,22 +1,42 @@
 from datetime import datetime
+from enum import Enum
 from typing import Optional
 
 from pydantic import BaseModel
 
 
-# Patient
+class SexEnum(str, Enum):
+    male = "male"
+    female = "female"
+
+
+class PatientBase(BaseModel):
+    first_name: str
+    last_name: str
+    sex: SexEnum
+    identifier: Optional[str] = None  # Made identifier optional
+    version: Optional[int] = 1
+
+
 class PatientCreate(BaseModel):
     first_name: str
     last_name: str
-    sex: str
-    identifier: str
+    sex: SexEnum
+    identifier: Optional[str] = None
 
 
-class PatientUpdate(BaseModel):
+class PatientUpdate(BaseModel):  # Changed from inheriting PatientBase
     first_name: str
     last_name: str
-    sex: str
-    identifier: str
+    sex: SexEnum
+    identifier: Optional[str] = None  # Identifier remains optional for update
+
+
+class Patient(PatientBase):
+    id: int
+
+    class Config:
+        orm_mode = True
 
 
 # Composition

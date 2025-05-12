@@ -10,16 +10,27 @@ export interface Patient {
   identifier: string;
 }
 
+export interface PatientCreatePayload {
+  first_name: string;
+  last_name: string;
+  sex: string;
+  identifier: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class PatientService {
-  private apiUrl = 'http://localhost:8000/patients'; // Assuming your backend API URL
+  private apiUrl = 'http://localhost:8000/patients';
 
   constructor(private http: HttpClient) { }
 
   getPatients(): Observable<Patient[]> {
     return this.http.get<Patient[]>(this.apiUrl);
+  }
+
+  createPatient(patient: PatientCreatePayload): Observable<Patient> {
+    return this.http.post<Patient>(this.apiUrl, patient);
   }
 
   updatePatient(id: number, patient: Patient): Observable<Patient> {

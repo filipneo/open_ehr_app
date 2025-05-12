@@ -1,0 +1,132 @@
+<div class="container mt-4">
+  <h2>Body Measurement List</h2>
+  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New Body Measurement</button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient</th>
+        <th>Record Time</th>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>SNOMED Code</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let measurement of bodyMeasurements">
+        <td>{{ measurement.id }}</td>
+        <td>{{ getPatientName(measurement.patient_id) }}</td>
+        <td>{{ measurement.record_time | date:'medium' }}</td>
+        <td>{{ measurement.value }}</td>
+        <td>{{ measurement.unit }}</td>
+        <td>{{ measurement.snomed_code }}</td>
+        <td>{{ measurement.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(measurement)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(measurement)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create BodyMeasurement Modal -->
+<div class="modal fade" id="createBodyMeasurementModal" tabindex="-1" aria-labelledby="createBodyMeasurementModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createBodyMeasurementModalLabel">Create Body Measurement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createPatientId" class="form-label">Patient</label>
+            <select class="form-control" id="createPatientId" [(ngModel)]="measurementToCreate.patient_id" name="patient_id" required>
+              <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.first_name }} {{ patient.last_name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createRecordTime" class="form-label">Record Time</label>
+            <input type="datetime-local" class="form-control" id="createRecordTime" [(ngModel)]="measurementToCreate.record_time" name="record_time" required>
+          </div>
+          <div class="mb-3">
+            <label for="createValue" class="form-label">Value</label>
+            <input type="number" class="form-control" id="createValue" [(ngModel)]="measurementToCreate.value" name="value" required>
+          </div>
+          <div class="mb-3">
+            <label for="createUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="createUnit" [(ngModel)]="measurementToCreate.unit" name="unit" required>
+          </div>
+          <div class="mb-3">
+            <label for="createSnomedCode" class="form-label">SNOMED Code</label>
+            <input type="text" class="form-control" id="createSnomedCode" [(ngModel)]="measurementToCreate.snomed_code" name="snomed_code">
+          </div>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update BodyMeasurement Modal -->
+<div class="modal fade" id="updateBodyMeasurementModal" tabindex="-1" aria-labelledby="updateBodyMeasurementModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateBodyMeasurementModalLabel">Update Body Measurement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onUpdateSubmit()">
+          <input type="hidden" [(ngModel)]="measurementToUpdate.id" name="id_update">
+          <div class="mb-3">
+            <label for="updatePatientId" class="form-label">Patient</label>
+            <select class="form-control" id="updatePatientId" [(ngModel)]="measurementToUpdate.patient_id" name="patient_id_update" required>
+              <option *ngFor="let patient of patients" [value]="patient.id">{{ patient.first_name }} {{ patient.last_name }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updateRecordTime" class="form-label">Record Time</label>
+            <input type="datetime-local" class="form-control" id="updateRecordTime" [(ngModel)]="measurementToUpdate.record_time" name="record_time_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateValue" class="form-label">Value</label>
+            <input type="number" class="form-control" id="updateValue" [(ngModel)]="measurementToUpdate.value" name="value_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="updateUnit" [(ngModel)]="measurementToUpdate.unit" name="unit_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateSnomedCode" class="form-label">SNOMED Code</label>
+            <input type="text" class="form-control" id="updateSnomedCode" [(ngModel)]="measurementToUpdate.snomed_code" name="snomed_code_update">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete BodyMeasurement Modal -->
+<div class="modal fade" id="deleteBodyMeasurementModal" tabindex="-1" aria-labelledby="deleteBodyMeasurementModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteBodyMeasurementModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete body measurement with ID: {{ measurementToDelete?.id }} for patient {{ getPatientName(measurementToDelete?.patient_id!) }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,134 @@
+<div class="container mt-4">
+  <h2>CBC Panel List</h2>
+  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New CBC Panel</button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Lab Test</th>
+        <th>Hemoglobin</th>
+        <th>White Cell</th>
+        <th>Platelet</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let panel of cbcPanels">
+        <td>{{ panel.id }}</td>
+        <td>{{ getLabTestName(panel.lab_test_id) }}</td>
+        <td>{{ getLabAnalyteDisplay(panel.hemoglobin_id) }}</td>
+        <td>{{ getLabAnalyteDisplay(panel.white_cell_id) }}</td>
+        <td>{{ getLabAnalyteDisplay(panel.platelet_id) }}</td>
+        <td>{{ panel.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(panel)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(panel)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create CbcPanel Modal -->
+<div class="modal fade" id="createCbcPanelModal" tabindex="-1" aria-labelledby="createCbcPanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createCbcPanelModalLabel">Create CBC Panel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createPanelLabTestId" class="form-label">Lab Test</label>
+            <select class="form-control" id="createPanelLabTestId" [(ngModel)]="createFormModel.lab_test_id" name="lab_test_id" required>
+              <option *ngFor="let lt of labTests" [value]="lt.id">{{ getLabTestName(lt.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPanelHemoglobinId" class="form-label">Hemoglobin</label>
+            <select class="form-control" id="createPanelHemoglobinId" [(ngModel)]="createFormModel.hemoglobin_id" name="hemoglobin_id" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPanelWhiteCellId" class="form-label">White Cell</label>
+            <select class="form-control" id="createPanelWhiteCellId" [(ngModel)]="createFormModel.white_cell_id" name="white_cell_id" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createPanelPlateletId" class="form-label">Platelet</label>
+            <select class="form-control" id="createPanelPlateletId" [(ngModel)]="createFormModel.platelet_id" name="platelet_id" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update CbcPanel Modal -->
+<div class="modal fade" id="updateCbcPanelModal" tabindex="-1" aria-labelledby="updateCbcPanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateCbcPanelModalLabel">Update CBC Panel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onUpdateSubmit()">
+          <input type="hidden" [(ngModel)]="updateFormModel.id" name="id_update">
+          <div class="mb-3">
+            <label for="updatePanelLabTestId" class="form-label">Lab Test</label>
+            <select class="form-control" id="updatePanelLabTestId" [(ngModel)]="updateFormModel.lab_test_id" name="lab_test_id_update" required>
+              <option *ngFor="let lt of labTests" [value]="lt.id">{{ getLabTestName(lt.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updatePanelHemoglobinId" class="form-label">Hemoglobin</label>
+            <select class="form-control" id="updatePanelHemoglobinId" [(ngModel)]="updateFormModel.hemoglobin_id" name="hemoglobin_id_update" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updatePanelWhiteCellId" class="form-label">White Cell</label>
+            <select class="form-control" id="updatePanelWhiteCellId" [(ngModel)]="updateFormModel.white_cell_id" name="white_cell_id_update" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updatePanelPlateletId" class="form-label">Platelet</label>
+            <select class="form-control" id="updatePanelPlateletId" [(ngModel)]="updateFormModel.platelet_id" name="platelet_id_update" required>
+              <option *ngFor="let la of labAnalyteResults" [value]="la.id">{{ getLabAnalyteDisplay(la.id) }}</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete CbcPanel Modal -->
+<div class="modal fade" id="deleteCbcPanelModal" tabindex="-1" aria-labelledby="deleteCbcPanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteCbcPanelModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete CBC Panel with ID: {{ panelToDelete?.id }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

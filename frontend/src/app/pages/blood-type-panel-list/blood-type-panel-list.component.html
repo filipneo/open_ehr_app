@@ -1,0 +1,110 @@
+<div class="container mt-4">
+  <h2>Blood Type Panel List</h2>
+  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Blood Type Panel</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Lab Test ID</th>
+        <th>ABO ID</th>
+        <th>Rh ID</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let panel of bloodTypePanels">
+        <td>{{ panel.id }}</td>
+        <td>{{ panel.lab_test_id }}</td>
+        <td>{{ panel.abo_id }}</td>
+        <td>{{ panel.rh_id }}</td>
+        <td>{{ panel.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(panel)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(panel)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create BloodTypePanel Modal -->
+<div class="modal fade" id="createBloodTypePanelModal" tabindex="-1" aria-labelledby="createBloodTypePanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createBloodTypePanelModalLabel">Create Blood Type Panel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createLabTestId" class="form-label">Lab Test ID</label>
+            <input type="number" class="form-control" id="createLabTestId" [(ngModel)]="panelToCreate.lab_test_id" name="createLabTestId" required>
+          </div>
+          <div class="mb-3">
+            <label for="createAboId" class="form-label">ABO ID</label>
+            <input type="number" class="form-control" id="createAboId" [(ngModel)]="panelToCreate.abo_id" name="createAboId">
+          </div>
+          <div class="mb-3">
+            <label for="createRhId" class="form-label">Rh ID</label>
+            <input type="number" class="form-control" id="createRhId" [(ngModel)]="panelToCreate.rh_id" name="createRhId">
+          </div>
+          <button type="submit" class="btn btn-primary">Create Panel</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update BloodTypePanel Modal -->
+<div class="modal fade" id="updateBloodTypePanelModal" tabindex="-1" aria-labelledby="updateBloodTypePanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateBloodTypePanelModalLabel">Update Blood Type Panel</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="panelToUpdate" (ngSubmit)="onUpdateSubmit()">
+          <div class="mb-3">
+            <label for="updateLabTestId" class="form-label">Lab Test ID</label>
+            <input type="number" class="form-control" id="updateLabTestId" [(ngModel)]="panelToUpdate.lab_test_id" name="updateLabTestId" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateAboId" class="form-label">ABO ID</label>
+            <input type="number" class="form-control" id="updateAboId" [(ngModel)]="panelToUpdate.abo_id" name="updateAboId">
+          </div>
+          <div class="mb-3">
+            <label for="updateRhId" class="form-label">Rh ID</label>
+            <input type="number" class="form-control" id="updateRhId" [(ngModel)]="panelToUpdate.rh_id" name="updateRhId">
+          </div>
+          <div class="mb-3">
+            <label for="updateVersion" class="form-label">Version</label>
+            <input type="number" class="form-control" id="updateVersion" [(ngModel)]="panelToUpdate.version" name="updateVersion">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteBloodTypePanelModal" tabindex="-1" aria-labelledby="deleteBloodTypePanelModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteBloodTypePanelModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete Blood Type Panel with ID {{ panelToDelete?.id }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

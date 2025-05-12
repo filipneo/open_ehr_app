@@ -1,0 +1,114 @@
+<div class="container mt-4">
+  <h2>Reference Range List</h2>
+  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Reference Range</button>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>LOINC Code</th>
+        <th>Low</th>
+        <th>High</th>
+        <th>Unit</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let range of referenceRanges">
+        <td>{{ range.loinc_code }}</td>
+        <td>{{ range.low }}</td>
+        <td>{{ range.high }}</td>
+        <td>{{ range.unit }}</td>
+        <td>{{ range.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(range)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(range)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create ReferenceRange Modal -->
+<div class="modal fade" id="createReferenceRangeModal" tabindex="-1" aria-labelledby="createReferenceRangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createReferenceRangeModalLabel">Create Reference Range</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createLoincCode" class="form-label">LOINC Code</label>
+            <input type="text" class="form-control" id="createLoincCode" [(ngModel)]="rangeToCreate.loinc_code" name="createLoincCode" required>
+          </div>
+          <div class="mb-3">
+            <label for="createLow" class="form-label">Low</label>
+            <input type="number" class="form-control" id="createLow" [(ngModel)]="rangeToCreate.low" name="createLow">
+          </div>
+          <div class="mb-3">
+            <label for="createHigh" class="form-label">High</label>
+            <input type="number" class="form-control" id="createHigh" [(ngModel)]="rangeToCreate.high" name="createHigh">
+          </div>
+          <div class="mb-3">
+            <label for="createUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="createUnit" [(ngModel)]="rangeToCreate.unit" name="createUnit">
+          </div>
+          <button type="submit" class="btn btn-primary">Create Range</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update ReferenceRange Modal -->
+<div class="modal fade" id="updateReferenceRangeModal" tabindex="-1" aria-labelledby="updateReferenceRangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateReferenceRangeModalLabel">Update Reference Range</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form *ngIf="rangeToUpdate" (ngSubmit)="onUpdateSubmit()">
+          <div class="mb-3">
+            <label for="updateLoincCode" class="form-label">LOINC Code (Read-only)</label>
+            <input type="text" class="form-control" id="updateLoincCode" [(ngModel)]="rangeToUpdate.loinc_code" name="updateLoincCode" readonly>
+          </div>
+          <div class="mb-3">
+            <label for="updateLow" class="form-label">Low</label>
+            <input type="number" class="form-control" id="updateLow" [(ngModel)]="rangeToUpdate.low" name="updateLow">
+          </div>
+          <div class="mb-3">
+            <label for="updateHigh" class="form-label">High</label>
+            <input type="number" class="form-control" id="updateHigh" [(ngModel)]="rangeToUpdate.high" name="updateHigh">
+          </div>
+          <div class="mb-3">
+            <label for="updateUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="updateUnit" [(ngModel)]="rangeToUpdate.unit" name="updateUnit">
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div class="modal fade" id="deleteReferenceRangeModal" tabindex="-1" aria-labelledby="deleteReferenceRangeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteReferenceRangeModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" (click)="cancelDelete()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete Reference Range with LOINC Code: {{ rangeToDelete?.loinc_code }}?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>

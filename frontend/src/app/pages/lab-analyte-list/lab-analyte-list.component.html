@@ -1,0 +1,168 @@
+<div class="container mt-4">
+  <h2>Lab Analyte Result List</h2>
+  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New Lab Analyte Result</button>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Lab Test</th>
+        <th>Analyte LOINC</th>
+        <th>Value</th>
+        <th>Unit</th>
+        <th>Ref. Low</th>
+        <th>Ref. High</th>
+        <th>Interpretation</th>
+        <th>Ref. Range</th>
+        <th>Version</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let analyte of labAnalyteResults">
+        <td>{{ analyte.id }}</td>
+        <td>{{ getLabTestName(analyte.lab_test_id) }}</td>
+        <td>{{ analyte.loinc_code }}</td>
+        <td>{{ analyte.value }}</td>
+        <td>{{ analyte.unit }}</td>
+        <td>{{ analyte.reference_low }}</td>
+        <td>{{ analyte.reference_high }}</td>
+        <td>{{ analyte.interpretation }}</td>
+        <td>{{ getReferenceRangeDisplay(analyte.reference_range_loinc_code) }}</td>
+        <td>{{ analyte.version }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(analyte)">Update</button>
+          <button class="btn btn-sm btn-danger" (click)="openDeleteModal(analyte)">Delete</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Create LabAnalyteResult Modal -->
+<div class="modal fade" id="createLabAnalyteModal" tabindex="-1" aria-labelledby="createLabAnalyteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="createLabAnalyteModalLabel">Create Lab Analyte Result</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onCreateSubmit()">
+          <div class="mb-3">
+            <label for="createAnalyteLabTestId" class="form-label">Lab Test</label>
+            <select class="form-control" id="createAnalyteLabTestId" [(ngModel)]="createFormModel.lab_test_id" name="lab_test_id" required>
+              <option *ngFor="let lt of labTests" [value]="lt.id">{{ getLabTestName(lt.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteLoincCode" class="form-label">Analyte LOINC Code</label>
+            <input type="text" class="form-control" id="createAnalyteLoincCode" [(ngModel)]="createFormModel.loinc_code" name="loinc_code" required>
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteValue" class="form-label">Value</label>
+            <input type="text" class="form-control" id="createAnalyteValue" [(ngModel)]="createFormModel.value" name="value" required>
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="createAnalyteUnit" [(ngModel)]="createFormModel.unit" name="unit">
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteRefLow" class="form-label">Reference Low</label>
+            <input type="text" class="form-control" id="createAnalyteRefLow" [(ngModel)]="createFormModel.reference_low" name="reference_low">
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteRefHigh" class="form-label">Reference High</label>
+            <input type="text" class="form-control" id="createAnalyteRefHigh" [(ngModel)]="createFormModel.reference_high" name="reference_high">
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteInterpretation" class="form-label">Interpretation</label>
+            <input type="text" class="form-control" id="createAnalyteInterpretation" [(ngModel)]="createFormModel.interpretation" name="interpretation">
+          </div>
+          <div class="mb-3">
+            <label for="createAnalyteRefRangeLoinc" class="form-label">Reference Range</label>
+            <select class="form-control" id="createAnalyteRefRangeLoinc" [(ngModel)]="createFormModel.reference_range_loinc_code" name="reference_range_loinc_code">
+              <option [ngValue]="undefined">Select Reference Range (Optional)</option>
+              <option *ngFor="let rr of referenceRanges" [value]="rr.loinc_code">{{ getReferenceRangeDisplay(rr.loinc_code) }}</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Create</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Update LabAnalyteResult Modal -->
+<div class="modal fade" id="updateLabAnalyteModal" tabindex="-1" aria-labelledby="updateLabAnalyteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="updateLabAnalyteModalLabel">Update Lab Analyte Result</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form (ngSubmit)="onUpdateSubmit()">
+          <input type="hidden" [(ngModel)]="updateFormModel.id" name="id_update">
+          <div class="mb-3">
+            <label for="updateAnalyteLabTestId" class="form-label">Lab Test</label>
+            <select class="form-control" id="updateAnalyteLabTestId" [(ngModel)]="updateFormModel.lab_test_id" name="lab_test_id_update" required>
+              <option *ngFor="let lt of labTests" [value]="lt.id">{{ getLabTestName(lt.id) }}</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteLoincCode" class="form-label">Analyte LOINC Code</label>
+            <input type="text" class="form-control" id="updateAnalyteLoincCode" [(ngModel)]="updateFormModel.loinc_code" name="loinc_code_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteValue" class="form-label">Value</label>
+            <input type="text" class="form-control" id="updateAnalyteValue" [(ngModel)]="updateFormModel.value" name="value_update" required>
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteUnit" class="form-label">Unit</label>
+            <input type="text" class="form-control" id="updateAnalyteUnit" [(ngModel)]="updateFormModel.unit" name="unit_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteRefLow" class="form-label">Reference Low</label>
+            <input type="text" class="form-control" id="updateAnalyteRefLow" [(ngModel)]="updateFormModel.reference_low" name="reference_low_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteRefHigh" class="form-label">Reference High</label>
+            <input type="text" class="form-control" id="updateAnalyteRefHigh" [(ngModel)]="updateFormModel.reference_high" name="reference_high_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteInterpretation" class="form-label">Interpretation</label>
+            <input type="text" class="form-control" id="updateAnalyteInterpretation" [(ngModel)]="updateFormModel.interpretation" name="interpretation_update">
+          </div>
+          <div class="mb-3">
+            <label for="updateAnalyteRefRangeLoinc" class="form-label">Reference Range</label>
+            <select class="form-control" id="updateAnalyteRefRangeLoinc" [(ngModel)]="updateFormModel.reference_range_loinc_code" name="reference_range_loinc_code_update">
+              <option [ngValue]="undefined">Select Reference Range (Optional)</option>
+              <option *ngFor="let rr of referenceRanges" [value]="rr.loinc_code">{{ getReferenceRangeDisplay(rr.loinc_code) }}</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Save Changes</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Delete LabAnalyteResult Modal -->
+<div class="modal fade" id="deleteLabAnalyteModal" tabindex="-1" aria-labelledby="deleteLabAnalyteModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="deleteLabAnalyteModalLabel">Confirm Delete</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are you sure you want to delete lab analyte result with ID: {{ analyteToDelete?.id }} (LOINC: {{ analyteToDelete?.loinc_code }})?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelDelete()">Cancel</button>
+        <button type="button" class="btn btn-danger" (click)="confirmDelete()">Delete</button>
+      </div>
+    </div>
+  </div>
+</div>
