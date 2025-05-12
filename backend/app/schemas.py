@@ -93,6 +93,7 @@ class LabTestBase(BaseModel):
     composition_id: int
     specimen_id: int
     loinc_code: Optional[str] = None
+    description: Optional[str] = None
 
 
 class LabTestCreate(LabTestBase):
@@ -133,57 +134,6 @@ class LabAnalyteResultUpdate(LabAnalyteResultBase):
 
 
 class LabAnalyteResult(LabAnalyteResultBase):
-    id: int
-    version: int
-
-    class Config:
-        from_attributes = True
-
-
-# =========================
-# CBC PANEL
-# =========================
-class CBCPanelBase(BaseModel):
-    lab_test_id: int
-    hemoglobin_id: Optional[int] = None
-    white_cell_id: Optional[int] = None
-    platelet_id: Optional[int] = None
-
-
-class CBCPanelCreate(CBCPanelBase):
-    pass
-
-
-class CBCPanelUpdate(CBCPanelBase):
-    pass
-
-
-class CBCPanel(CBCPanelBase):
-    id: int
-    version: int
-
-    class Config:
-        from_attributes = True
-
-
-# =========================
-# BLOOD TYPE PANEL
-# =========================
-class BloodTypePanelBase(BaseModel):
-    lab_test_id: int
-    abo_id: Optional[int] = None
-    rh_id: Optional[int] = None
-
-
-class BloodTypePanelCreate(BloodTypePanelBase):
-    pass
-
-
-class BloodTypePanelUpdate(BloodTypePanelBase):
-    pass
-
-
-class BloodTypePanel(BloodTypePanelBase):
     id: int
     version: int
 

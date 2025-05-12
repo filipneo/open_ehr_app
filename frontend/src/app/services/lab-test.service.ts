@@ -7,6 +7,7 @@ export interface LabTest {
   composition_id: number;
   specimen_id: number;
   loinc_code: string | null;
+  description: string | null;
   version: number;
 }
 
@@ -14,12 +15,14 @@ export interface LabTestCreatePayload {
   composition_id: number;
   specimen_id: number;
   loinc_code?: string | null;
+  description?: string | null;
 }
 
 export interface LabTestUpdatePayload {
   composition_id: number;
   specimen_id: number;
   loinc_code?: string | null;
+  description?: string | null;
 }
 
 @Injectable({

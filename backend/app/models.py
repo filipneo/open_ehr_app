@@ -44,6 +44,7 @@ class LabTest(Base):
     composition_id = Column(Integer, ForeignKey("composition.id"), nullable=False)
     specimen_id = Column(Integer, ForeignKey("specimen.id"), nullable=False)
     loinc_code = Column(String(20))
+    description = Column(String(255))
     version = Column(Integer, default=1)
 
 
@@ -57,25 +58,6 @@ class LabAnalyteResult(Base):
     reference_low = Column(Float)
     reference_high = Column(Float)
     interpretation = Column(String(20))
-    version = Column(Integer, default=1)
-
-
-class CBCPanel(Base):
-    __tablename__ = "cbc_panel"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
-    hemoglobin_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    white_cell_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    platelet_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    version = Column(Integer, default=1)
-
-
-class BloodTypePanel(Base):
-    __tablename__ = "blood_type_panel"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
-    abo_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    rh_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
     version = Column(Integer, default=1)
 
 
@@ -145,6 +127,7 @@ class LabTestHistory(Base):
     composition_id = Column(Integer, ForeignKey("composition.id"), nullable=False)
     specimen_id = Column(Integer, ForeignKey("specimen.id"), nullable=False)
     loinc_code = Column(String(20))
+    description = Column(String(255))
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 
@@ -160,29 +143,6 @@ class LabAnalyteResultHistory(Base):
     reference_low = Column(Float)
     reference_high = Column(Float)
     interpretation = Column(String(20))
-    version = Column(Integer)
-    updated_at = Column(DateTime, default=datetime.utcnow)
-
-
-class CBCPanelHistory(Base):
-    __tablename__ = "cbc_panel_history"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    cbc_panel_id = Column(Integer, ForeignKey("cbc_panel.id"), nullable=False)
-    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
-    hemoglobin_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    white_cell_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    platelet_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    version = Column(Integer)
-    updated_at = Column(DateTime, default=datetime.utcnow)
-
-
-class BloodTypePanelHistory(Base):
-    __tablename__ = "blood_type_panel_history"
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    blood_type_panel_id = Column(Integer, ForeignKey("blood_type_panel.id"), nullable=False)
-    lab_test_id = Column(Integer, ForeignKey("lab_test.id"), nullable=False)
-    abo_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
-    rh_id = Column(Integer, ForeignKey("lab_analyte_result.id"))
     version = Column(Integer)
     updated_at = Column(DateTime, default=datetime.utcnow)
 

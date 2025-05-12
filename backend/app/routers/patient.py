@@ -2,9 +2,7 @@ from datetime import datetime
 
 from app import database
 from app.models import (
-    BloodTypePanel,
     BodyMeasurement,
-    CBCPanel,
     Composition,
     LabAnalyteResult,
     LabTest,
@@ -139,15 +137,11 @@ def get_patient_full(patient_id: int, db: Session = Depends(get_db)):
             analytes = (
                 db.query(LabAnalyteResult).filter(LabAnalyteResult.lab_test_id == test.id).all()
             )
-            cbc_panel = db.query(CBCPanel).filter(CBCPanel.lab_test_id == test.id).first()
-            blood_type_panel = (
-                db.query(BloodTypePanel).filter(BloodTypePanel.lab_test_id == test.id).first()
-            )
-
             lab_test_data.append(
                 {
                     "id": test.id,
                     "loinc_code": test.loinc_code,
+                    "description": test.description,
                     "version": test.version,
                     "specimen": {
                         "id": specimen.id,
@@ -172,23 +166,6 @@ def get_patient_full(patient_id: int, db: Session = Depends(get_db)):
                         }
                         for a in analytes
                     ],
-                    "cbc_panel": {
-                        "id": cbc_panel.id,
-                        "hemoglobin_id": cbc_panel.hemoglobin_id,
-                        "white_cell_id": cbc_panel.white_cell_id,
-                        "platelet_id": cbc_panel.platelet_id,
-                        "version": cbc_panel.version,
-                    }
-                    if cbc_panel
-                    else None,
-                    "blood_type_panel": {
-                        "id": blood_type_panel.id,
-                        "abo_id": blood_type_panel.abo_id,
-                        "rh_id": blood_type_panel.rh_id,
-                        "version": blood_type_panel.version,
-                    }
-                    if blood_type_panel
-                    else None,
                 }
             )
 

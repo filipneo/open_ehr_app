@@ -89,7 +89,10 @@ def populate_database():
 
         # Create a lab test
         lab_test = models.LabTest(
-            composition_id=composition_id, specimen_id=specimen_id, loinc_code="57021-8"
+            composition_id=composition_id,
+            specimen_id=specimen_id,
+            loinc_code="57021-8",
+            description="Complete Blood Count (CBC)",
         )
         session.add(lab_test)
         session.flush()
@@ -139,15 +142,6 @@ def populate_database():
         session.add(platelets)
         session.flush()
         analyte_map["platelets"] = platelets.id
-
-        # Create CBC Panel
-        cbc_panel = models.CBCPanel(
-            lab_test_id=lab_test_id,
-            hemoglobin_id=analyte_map["hemoglobin"],
-            white_cell_id=analyte_map["wbc"],
-            platelet_id=analyte_map["platelets"],
-        )
-        session.add(cbc_panel)
 
         # Create Body Measurements
         height = models.BodyMeasurement(

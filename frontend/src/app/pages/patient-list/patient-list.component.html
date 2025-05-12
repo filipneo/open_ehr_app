@@ -197,7 +197,7 @@
               <div class="card-body">
                 <!-- Lab Tests -->
                 <div *ngFor="let labTest of composition.lab_tests" class="mb-4">
-                  <h5 class="border-bottom pb-2">Lab Test #{{ labTest.id }} - LOINC: {{ labTest.loinc_code }}</h5>
+                  <h5 class="border-bottom pb-2">Lab Test #{{ labTest.id }} - LOINC: {{ labTest.loinc_code }} - Description: {{labTest.description}}</h5>
                   
                   <!-- Specimen Information -->
                   <div *ngIf="labTest.specimen" class="card mb-3">
@@ -219,34 +219,7 @@
                       </div>
                     </div>
                   </div>
-                  
-                  <!-- CBC Panel -->
-                  <div *ngIf="labTest.cbc_panel" class="card mb-3">
-                    <div class="card-header bg-light">
-                      <h6 class="mb-0">CBC Panel</h6>
-                    </div>
-                    <div class="card-body">
-                      <p><strong>ID:</strong> {{ labTest.cbc_panel.id }}</p>
-                      <p><strong>Hemoglobin ID:</strong> {{ labTest.cbc_panel.hemoglobin_id }}</p>
-                      <p><strong>White Cell ID:</strong> {{ labTest.cbc_panel.white_cell_id }}</p>
-                      <p><strong>Platelet ID:</strong> {{ labTest.cbc_panel.platelet_id }}</p>
-                      <p><strong>Version:</strong> {{ labTest.cbc_panel.version }}</p>
-                    </div>
-                  </div>
-                  
-                  <!-- Blood Type Panel -->
-                  <div *ngIf="labTest.blood_type_panel" class="card mb-3">
-                    <div class="card-header bg-light">
-                      <h6 class="mb-0">Blood Type Panel</h6>
-                    </div>
-                    <div class="card-body">
-                      <p><strong>ID:</strong> {{ labTest.blood_type_panel.id }}</p>
-                      <p><strong>ABO ID:</strong> {{ labTest.blood_type_panel.abo_id }}</p>
-                      <p><strong>RH ID:</strong> {{ labTest.blood_type_panel.rh_id }}</p>
-                      <p><strong>Version:</strong> {{ labTest.blood_type_panel.version }}</p>
-                    </div>
-                  </div>
-                  
+                                    
                   <!-- Analytes -->
                   <div *ngIf="labTest.analytes && labTest.analytes.length > 0" class="card mb-3">
                     <div class="card-header bg-light">

@@ -39,11 +39,10 @@ export interface Composition {
 export interface LabTest {
   id: number;
   loinc_code: string;
+  description: string | null;
   version: number;
   specimen: Specimen | null;
   analytes: LabAnalyte[];
-  cbc_panel: CBCPanel | null;
-  blood_type_panel: BloodTypePanel | null;
 }
 
 export interface Specimen {
@@ -63,21 +62,6 @@ export interface LabAnalyte {
   reference_low: number | null;
   reference_high: number | null;
   interpretation: string | null;
-  version: number;
-}
-
-export interface CBCPanel {
-  id: number;
-  hemoglobin_id: number;
-  white_cell_id: number;
-  platelet_id: number;
-  version: number;
-}
-
-export interface BloodTypePanel {
-  id: number;
-  abo_id: number;
-  rh_id: number;
   version: number;
 }
 

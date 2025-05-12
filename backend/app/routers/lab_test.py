@@ -60,14 +60,13 @@ def update_lab_test(
 ):
     db_lab_test = db.query(LabTest).filter(LabTest.id == lab_test_id).first()
     if not db_lab_test:
-        raise HTTPException(status_code=404, detail="Lab test not found")
-
-    # Archive current state
+        raise HTTPException(status_code=404, detail="Lab test not found")  # Archive current state
     history = LabTestHistory(
         lab_test_id=db_lab_test.id,
         composition_id=db_lab_test.composition_id,
         specimen_id=db_lab_test.specimen_id,
         loinc_code=db_lab_test.loinc_code,
+        description=db_lab_test.description,
         version=db_lab_test.version,
         updated_at=datetime.utcnow(),
     )

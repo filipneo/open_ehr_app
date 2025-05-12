@@ -20,10 +20,10 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
   compositions: Composition[] = [];
   specimens: Specimen[] = [];
   patients: Patient[] = []; // To display patient names for compositions
-
   // Form model for creating a LabTest
   createFormModel = {
     loinc_code: '',
+    description: '',
     composition_id: undefined as number | undefined,
     specimen_id: undefined as number | undefined,
   };
@@ -32,6 +32,7 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
   updateFormModel = {
     id: undefined as number | undefined,
     loinc_code: '',
+    description: '',
     composition_id: undefined as number | undefined,
     specimen_id: undefined as number | undefined,
     version: 1
@@ -117,10 +118,10 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
     const specimen = this.specimens.find(s => s.id === specimenId);
     return specimen ? `${specimen.specimen_type} (ID: ${specimen.id}, Collected: ${new Date(specimen.collection_time).toLocaleDateString()})` : 'Unknown Specimen';
   }
-
   openCreateModal(): void {
     this.createFormModel = {
       loinc_code: '',
+      description: '',
       composition_id: this.compositions.length > 0 ? this.compositions[0].id : undefined,
       specimen_id: this.specimens.length > 0 ? this.specimens[0].id : undefined,
     };
@@ -133,22 +134,22 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
       alert('Composition and Specimen are required fields');
       return;
     }
-    
-    const payload: LabTestCreatePayload = {
+      const payload: LabTestCreatePayload = {
       composition_id: this.createFormModel.composition_id,
       specimen_id: this.createFormModel.specimen_id,
-      loinc_code: this.createFormModel.loinc_code === '' ? null : this.createFormModel.loinc_code
+      loinc_code: this.createFormModel.loinc_code === '' ? null : this.createFormModel.loinc_code,
+      description: this.createFormModel.description === '' ? null : this.createFormModel.description
     };
     this.labTestService.createLabTest(payload).subscribe(() => {
       this.loadLabTests();
       if (this.createModal) this.createModal.hide();
     });
   }
-
   openUpdateModal(labTest: LabTest): void {
     this.updateFormModel = {
       id: labTest.id,
       loinc_code: labTest.loinc_code || '',
+      description: labTest.description || '',
       composition_id: labTest.composition_id,
       specimen_id: labTest.specimen_id,
       version: labTest.version
@@ -167,11 +168,11 @@ export class LabTestListComponent implements OnInit, AfterViewInit {
       alert('Composition and Specimen are required fields');
       return;
     }
-    
-    const payload: LabTestUpdatePayload = {
+      const payload: LabTestUpdatePayload = {
       composition_id: this.updateFormModel.composition_id,
       specimen_id: this.updateFormModel.specimen_id,
-      loinc_code: this.updateFormModel.loinc_code === '' ? null : this.updateFormModel.loinc_code
+      loinc_code: this.updateFormModel.loinc_code === '' ? null : this.updateFormModel.loinc_code,
+      description: this.updateFormModel.description === '' ? null : this.updateFormModel.description
     };
     this.labTestService.updateLabTest(this.updateFormModel.id, payload).subscribe(() => {
       this.loadLabTests();
