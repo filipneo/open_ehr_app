@@ -212,3 +212,5 @@ coverage/
 
 # Assingments
 *_assignment.pdf
+
+.DS_Store*
