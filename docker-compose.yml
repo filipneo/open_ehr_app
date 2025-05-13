@@ -7,14 +7,18 @@ services:
       - ./backend:/app
     environment:
       - DB_PATH=sqlite:///./ehr.db
+    restart: unless-stopped
 
   frontend:
     build: ./frontend
     ports:
-      - "8080:8080"
-    depends_on:
-      - backend
+      - "80:80"
     volumes:
       - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
     environment:
-      - API_BASE=http://backend:8000
+      - API_URL=http://backend:8000
+    restart: unless-stopped
+    

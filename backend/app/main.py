@@ -11,7 +11,7 @@ from app.routers import (
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="EHR API", version="1.0.0", description="A simple electronic health record API")
+app = FastAPI(title="EHR API", version="1.0.0")
 
 # Setup CORS
 app.add_middleware(
@@ -33,5 +33,4 @@ app.include_router(specimen.router)
 app.include_router(lab_test.router)
 app.include_router(lab_analyte.router)
 app.include_router(body_measurement.router)
-app.include_router(reference_range.router)
 app.include_router(reference_range.router)
