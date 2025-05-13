@@ -88,7 +88,7 @@ This structure enables full traceability and reconstruction of historical states
 
 ![Database Schema](imgs/database_scheme.png)
 
-*Database schema diagram showing the relationships between main entities and their history tables.*
+*Database schema diagram showing the relationships between main entities*
 
 ### 📡 API Overview
 
