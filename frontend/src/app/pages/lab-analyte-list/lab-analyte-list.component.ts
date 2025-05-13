@@ -130,7 +130,7 @@ export class LabAnalyteListComponent implements OnInit, AfterViewInit {
       return;
     }
     
-      // Calculate interpretation based on value and reference range
+    // Calculate interpretation based on value and reference range
     let interpretation = this.createFormModel.interpretation;
     if (!interpretation) {
       const value = this.createFormModel.value;

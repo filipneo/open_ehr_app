@@ -1,6 +1,8 @@
 <div class="container mt-4">
-  <h2>Patient List</h2>
-  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Patient</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Patient List</h2>
+    <button class="btn btn-success" (click)="openCreateModal()">Create New Patient</button>
+</div>
   <table class="table table-striped">
     <thead>      <tr>
         <th>ID</th>
@@ -18,7 +20,7 @@
             <td>{{ patient.first_name }}</td>
             <td>{{ patient.last_name }}</td>
             <td>{{ patient.sex }}</td>
-            <td>{{ patient.identifier || 'N/A' }}</td>
+            <td>{{ patient.identifier }}</td>
             <td>{{ patient.version }}</td>
             <td (click)="$event.stopPropagation()">
             <button class="btn btn-sm btn-info me-2" (click)="openDetailsModal(patient)">Detail</button>
@@ -39,7 +41,7 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form (ngSubmit)="onCreateSubmit()">          <div class="mb-3">
+        <form (ngSubmit)="onCreateSubmit()"> <div class="mb-3">
             <label for="createFirstName" class="form-label">First Name <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createFirstName" [(ngModel)]="patientToCreate.first_name" name="createFirstName" required>
           </div>
@@ -56,9 +58,8 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="createIdentifier" class="form-label">Identifier</label>
+            <label for="createIdentifier" class="form-label">Identifier  <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="createIdentifier" [(ngModel)]="patientToCreate.identifier" name="createIdentifier">
-            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Create Patient</button>
         </form>
@@ -93,9 +94,8 @@
             </select>
           </div>
           <div class="mb-3">
-            <label for="identifier" class="form-label">Identifier</label>
+            <label for="identifier" class="form-label">Identifier  <span class="text-danger">*</span></label>
             <input type="text" class="form-control" id="identifier" [(ngModel)]="patientToUpdate.identifier" name="identifier">
-            <small class="text-muted">Optional</small>
           </div>
           <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
@@ -146,7 +146,7 @@
                 </div>
                 <div class="col-md-6">
                   <p><strong>Sex:</strong> {{ patientFullDetails.sex }}</p>
-                  <p><strong>Identifier:</strong> {{ patientFullDetails.identifier || 'N/A' }}</p>
+                  <p><strong>Identifier:</strong> {{ patientFullDetails.identifier }}</p>
                   <p><strong>Version:</strong> {{ patientFullDetails.version }}</p>
                 </div>
               </div>

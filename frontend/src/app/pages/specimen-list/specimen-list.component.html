@@ -1,6 +1,8 @@
 <div class="container mt-4">
-  <h2>Specimen List</h2>
-  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New Specimen</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Specimen List</h2>
+    <button class="btn btn-success" (click)="openCreateModal()">Create New Specimen</button>
+</div>
 
   <table class="table table-striped">
     <thead>
@@ -23,7 +25,7 @@
         <td>{{ specimen.description }}</td>
         <td>{{ specimen.version }}</td>
         <td>
-          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(specimen)">Update</button>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(specimen)">Update</button>
           <button class="btn btn-sm btn-danger" (click)="openDeleteModal(specimen)">Delete</button>
         </td>
       </tr>

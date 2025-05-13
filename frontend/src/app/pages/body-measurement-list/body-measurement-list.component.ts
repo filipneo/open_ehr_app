@@ -4,8 +4,6 @@ import { FormsModule } from '@angular/forms';
 import { BodyMeasurement, BodyMeasurementService, BodyMeasurementCreatePayload, BodyMeasurementUpdatePayload } from '../../services/body-measurement.service';
 import { Patient, PatientService } from '../../services/patient.service'; // For patient dropdown
 
-// It's better to import bootstrap if you have type definitions, or ensure it's globally available.
-// For now, using 'any' to avoid compilation errors if types are not set up.
 declare var bootstrap: any;
 
 @Component({
@@ -17,18 +15,16 @@ declare var bootstrap: any;
 })
 export class BodyMeasurementListComponent implements OnInit, AfterViewInit {
   bodyMeasurements: BodyMeasurement[] = [];
-  patients: Patient[] = []; // To store patient list for dropdown
+  patients: Patient[] = [];
   measurementToCreate: BodyMeasurementCreatePayload = {
-    patient_id: 0, // Initialize with a default or ensure it's set before use
+    patient_id: 0,
     record_time: '',
     value: 0,
     unit: '',
     snomed_code: ''
   };
-  // For update, ensure all fields are potentially part of the form.
-  // id is crucial for the update operation itself.
   measurementToUpdate: BodyMeasurementUpdatePayload & { id?: number, version?: number } = {
-    id: undefined, // Keep id for context, but it's not part of the payload for update typically
+    id: undefined,
     patient_id: 0,
     record_time: '',
     value: 0,
@@ -43,16 +39,15 @@ export class BodyMeasurementListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private bodyMeasurementService: BodyMeasurementService,
-    private patientService: PatientService // Inject PatientService
+    private patientService: PatientService
   ) { }
 
   ngOnInit(): void {
     this.loadBodyMeasurements();
-    this.loadPatients(); // Load patients for the dropdown
+    this.loadPatients();
   }
 
   ngAfterViewInit(): void {
-    // Initialize Bootstrap modals
     const createModalEl = document.getElementById('createBodyMeasurementModal');
     if (createModalEl) {
       this.createModal = new bootstrap.Modal(createModalEl);
@@ -158,7 +153,7 @@ export class BodyMeasurementListComponent implements OnInit, AfterViewInit {
     this.measurementToUpdate = {
       ...measurement, // Spread existing measurement data
       record_time: this.formatDateTimeForInput(measurement.record_time), // Format for input
-      version: measurement.version // Include version for display purposes
+      version: measurement.version
     };
     if (this.updateModal) {
       this.updateModal.show();

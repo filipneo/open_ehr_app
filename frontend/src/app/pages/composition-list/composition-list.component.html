@@ -1,11 +1,13 @@
 <div class="container mt-4">
-  <h2>Composition List</h2>
-  <button class="btn btn-success mb-3" (click)="openCreateModal()">Create New Composition</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Composition List</h2>
+    <button class="btn btn-success" (click)="openCreateModal()">Create New Composition</button>
+</div>
   <table class="table table-striped">
     <thead>
       <tr>
         <th>ID</th>
-        <th>Patient</th> <!-- Changed from Patient ID -->
+        <th>Patient</th>
         <th>Start Time</th>
         <th>Version</th>
         <th>Actions</th>
@@ -14,7 +16,7 @@
     <tbody>
       <tr *ngFor="let composition of compositions">
         <td>{{ composition.id }}</td>
-        <td>{{ getPatientName(composition.patient_id) }}</td> <!-- Use getPatientName method -->
+        <td>{{ getPatientName(composition.patient_id) }}</td>
         <td>{{ composition.start_time | date:'medium' }}</td> <!-- Formatting date for display -->
         <td>{{ composition.version }}</td>
         <td>

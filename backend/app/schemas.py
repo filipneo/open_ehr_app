@@ -17,7 +17,7 @@ class PatientBase(BaseModel):
     first_name: str
     last_name: str
     sex: SexEnum
-    identifier: Optional[str] = None
+    identifier: str
 
 
 class PatientCreate(PatientBase):

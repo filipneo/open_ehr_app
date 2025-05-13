@@ -1,6 +1,8 @@
 <div class="container mt-4">
-  <h2>Body Measurement List</h2>
-  <button class="btn btn-primary mb-3" (click)="openCreateModal()">Create New Body Measurement</button>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Body Measurement List</h2>
+    <button class="btn btn-success" (click)="openCreateModal()">Create New Body Measurement</button>
+</div>
 
   <table class="table table-striped">
     <thead>
@@ -25,7 +27,7 @@
         <td>{{ measurement.snomed_code }}</td>
         <td>{{ measurement.version }}</td>
         <td>
-          <button class="btn btn-sm btn-warning me-2" (click)="openUpdateModal(measurement)">Update</button>
+          <button class="btn btn-sm btn-primary me-2" (click)="openUpdateModal(measurement)">Update</button>
           <button class="btn btn-sm btn-danger" (click)="openDeleteModal(measurement)">Delete</button>
         </td>
       </tr>

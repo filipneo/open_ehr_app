@@ -1,19 +1,19 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Composition, CompositionService, CompositionCreatePayload } from '../../services/composition.service';
-import { Patient, PatientService } from '../../services/patient.service'; // Import Patient and PatientService
+import { Patient, PatientService } from '../../services/patient.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-composition-list',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Added CommonModule and FormsModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './composition-list.component.html',
   styleUrl: './composition-list.component.scss'
 })
 export class CompositionListComponent implements OnInit, AfterViewInit {
   compositions: Composition[] = [];
-  patients: Patient[] = []; // Add patients array
+  patients: Patient[] = [];
   compositionToUpdate: Composition = {} as Composition;
   compositionToCreate: CompositionCreatePayload = {} as CompositionCreatePayload;
   compositionToDelete: Composition | null = null;
@@ -24,12 +24,12 @@ export class CompositionListComponent implements OnInit, AfterViewInit {
 
   constructor(
     private compositionService: CompositionService,
-    private patientService: PatientService // Inject PatientService
+    private patientService: PatientService
   ) { }
 
   ngOnInit(): void {
     this.loadCompositions();
-    this.loadPatients(); // Load patients on init
+    this.loadPatients();
   }
 
   ngAfterViewInit(): void {
@@ -69,19 +69,18 @@ export class CompositionListComponent implements OnInit, AfterViewInit {
     });
   }
 
-  loadPatients(): void { // Method to load patients
+  loadPatients(): void {
     this.patientService.getPatients().subscribe(data => {
       this.patients = data;
     });
   }
 
-  getPatientName(patientId: number): string { // Method to get patient name
+  getPatientName(patientId: number): string {
     const patient = this.patients.find(p => p.id === patientId);
     return patient ? `${patient.first_name} ${patient.last_name}` : 'Unknown Patient';
   }
 
   openCreateModal(): void {
-    // Ensure a default patient_id is selected if patients list is not empty
     const defaultPatientId = this.patients.length > 0 ? this.patients[0].id : 0;
     this.compositionToCreate = { 
       patient_id: defaultPatientId, 
