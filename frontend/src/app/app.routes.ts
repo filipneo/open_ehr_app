@@ -7,6 +7,7 @@ import { LabAnalyteListComponent } from './pages/lab-analyte-list/lab-analyte-li
 import { LabTestListComponent } from './pages/lab-test-list/lab-test-list.component';
 import { ReferenceRangeListComponent } from './pages/reference-range-list/reference-range-list.component';
 import { SpecimenListComponent } from './pages/specimen-list/specimen-list.component';
+import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 export const routes: Routes = [
     { path: '', component: HomeComponent },
@@ -16,5 +17,6 @@ export const routes: Routes = [
     { path: 'lab-analytes', component: LabAnalyteListComponent },
     { path: 'lab-tests', component: LabTestListComponent },
     { path: 'reference-ranges', component: ReferenceRangeListComponent },
-    { path: 'specimens', component: SpecimenListComponent }
+    { path: 'specimens', component: SpecimenListComponent },
+    { path: '**', component: NotFoundComponent } // Wildcard route for 404 page - must be the last route!
 ];

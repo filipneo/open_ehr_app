@@ -1,3 +1,68 @@
 <div class="container mt-4">
-  <h1>Welcome to the EHR Application</h1>
+  <div class="jumbotron bg-light p-4 mb-4 rounded">
+    <h1 class="display-4">🩺 Welcome to the EHR System</h1>
+    <p class="lead">A comprehensive Electronic Health Record system for managing patient data, laboratory tests, and clinical measurements.</p>
+    <hr class="my-4">
+    <p>This application enables healthcare providers to efficiently track patient information with full version control, providing both current state access and a complete audit history.</p>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Patient Management</h5>
+          <p class="card-text">View and manage patient demographics and clinical histories.</p>
+          <a routerLink="/patients" class="btn btn-primary">Explore Patients</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Clinical Compositions</h5>
+          <p class="card-text">Access clinical sessions, visits, and encounters.</p>
+          <a routerLink="/compositions" class="btn btn-primary">View Compositions</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Laboratory Tests</h5>
+          <p class="card-text">Manage laboratory tests and their results.</p>
+          <a routerLink="/lab-tests" class="btn btn-primary">View Lab Tests</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Body Measurements</h5>
+          <p class="card-text">Track physiological measurements like weight and blood pressure.</p>
+          <a routerLink="/body-measurements" class="btn btn-primary">View Measurements</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Specimens</h5>
+          <p class="card-text">Manage biological specimen collection and metadata.</p>
+          <a routerLink="/specimens" class="btn btn-primary">View Specimens</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">Reference Ranges</h5>
+          <p class="card-text">Access normal ranges for laboratory analytes.</p>
+          <a routerLink="/reference-ranges" class="btn btn-primary">View References</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
